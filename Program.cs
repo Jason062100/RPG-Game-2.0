@@ -57,18 +57,21 @@ namespace Jason
                     case 1:
                         Console.Clear();
                         Console.WriteLine("You have chosen a Warrior.");
+                        currentPlayer.Class = "Warrior";
                         x = false;
                         break;
 
                     case 2:
                         Console.Clear();
                         Console.WriteLine("You have chosen a Mage.");
+                        currentPlayer.Class = "Mage";
                         x = false;
                         break;
 
                     case 3:
                         Console.Clear();
                         Console.WriteLine("You have chosen a Rogue.");
+                        currentPlayer.Class = "Rogue";
                         x = false;
                         break;
 
