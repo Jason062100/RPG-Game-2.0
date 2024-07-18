@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,15 +30,15 @@ namespace Jason
                     {
                         if (Convert.ToInt32(input) == 1)
                         {
-                            Console.WriteLine("Would you like to use 1. Light Attack (5-15 dmg) or 2. Heavy Attack (0-20 dmg)");
+                            Console.WriteLine($"Would you like to use 1. {Program.currentPlayer.warriorLightAttack} or 2. {Program.currentPlayer.warriorHeavyAttack}");
                             string attackChoice = Console.ReadLine();
                             if (Convert.ToInt32(attackChoice) == 1)
                             {
-                                h = useLightAttack(h, n);
+                                h = Player.WarriorLightAttack(h, n);
                             }
                             else if (Convert.ToInt32(attackChoice) == 2)
                             {
-                                h = useHeavyAttack(h, n);
+                                h = Player.WarriorHeavyAttack(h, n);
                             }
                             else
                             {
@@ -49,7 +49,7 @@ namespace Jason
                             if (h > 0)
                             {
                                 int enemyAttack = random.Next(0, p + 1);
-                                userH -= enemyAttack;
+                                userH -= enemyAttack; //userH = enemyAttack - armorValue
                                 if (userH < 0)
                                 {
                                     userH = 0;
@@ -75,11 +75,11 @@ namespace Jason
                     Console.WriteLine($"You killed the {n}!");
 
                     //Gold drop
-                    int goldDropped = Loot.goldDrop();
+                    int goldDropped = Loot.GoldDrop();
                     Program.currentPlayer.gold += goldDropped; //Updates the players gold with the amount gained
 
                     //Potion drop
-                    int potionDropped = Loot.potionDrop();
+                    int potionDropped = Loot.PotionDrop();
                     Program.currentPlayer.potions += potionDropped; //Updates the players gold with the amount gained
                     Console.WriteLine($"The {n} dropped {goldDropped} gold and {potionDropped} potions. You have a total of {Program.currentPlayer.gold} gold and {Program.currentPlayer.potions} potions.");
 
@@ -95,12 +95,15 @@ namespace Jason
             }
         }
 
+
+
         //Resets the players stats at the start of a new game
         public static void ResetPlayer()
         {
             userH = Program.currentPlayer.health;
             Program.currentPlayer.gold = 0;
         }
+
 
 
         //Uses a potion
@@ -125,36 +128,6 @@ namespace Jason
                     usePot = "n";
                 }
             }
-        }
-
-
-        //Uses a light attack
-        public static int useLightAttack(int h, string n) //5-15 dmg
-        {
-            int attack = random.Next(Program.currentPlayer.damage - 15, Program.currentPlayer.damage - 4);
-            h -= attack;
-            if (h < 0)
-            {
-                h = 0;
-            }
-            Console.WriteLine($"You attack the {n} for {attack} damage leaving the {n} with {h} health.");
-
-            return h;
-        }
-
-
-        //Uses a heavy attack
-        public static int useHeavyAttack(int h, string n) //0-20 dmg
-        {
-            int attack = random.Next(0, Program.currentPlayer.damage + 1);
-            h -= attack;
-            if (h < 0)
-            {
-                h = 0;
-            }
-            Console.WriteLine($"You attack the {n} for {attack} damage leaving the {n} with {h} health.");
-
-            return h;
         }
     }
 }
