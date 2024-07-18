@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Jason;
@@ -18,12 +17,11 @@ namespace Jason
         {
             while (playAgain == "y")
             {
-                Weapons.sayShoud();
                 //Starts game and resets player stats
                 Start();
                 Encounters.ResetPlayer();
 
-
+                
                 //Encounters
                 Encounters.Combat("Zombie", 10, 30);
 
@@ -47,23 +45,39 @@ namespace Jason
         {
             Console.Clear();
             Console.WriteLine("Welcome to RPG Game. Which class would you like to play as? ");
-            Console.WriteLine("1. Knight");
+            Console.WriteLine("1. Warrior  2. Mage  3. Rogue");
 
-            int x = 1;
-            int input = 0;
-            while (x == 1 && input == 0)
+            int input = Convert.ToInt32(Console.ReadLine());
+            bool x = true;
+
+            while (x)
             {
-                try
+                switch (input)
                 {
-                    input = Convert.ToInt32(Console.ReadLine());
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Invalid input.");
+                    case 1:
+                        Console.Clear();
+                        Console.WriteLine("You have chosen a Warrior.");
+                        x = false;
+                        break;
+
+                    case 2:
+                        Console.Clear();
+                        Console.WriteLine("You have chosen a Mage.");
+                        x = false;
+                        break;
+
+                    case 3:
+                        Console.Clear();
+                        Console.WriteLine("You have chosen a Rogue.");
+                        x = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid input. Try again:");
+                        break;
                 }
             }
 
-            Console.Clear();
             Console.WriteLine("You are trying to find your way out of this forest for a while now...");
         }
     }
