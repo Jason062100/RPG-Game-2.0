@@ -1,3 +1,5 @@
-make enemyattack() and get rid of it from combat()
-make combat see what class you are using to determine what attacks and stuff to use
-work on classes
+DONE make enemyattack() and get rid of it from combat()
+DONE make combat see what class you are using to determine what attacks and stuff to use
+DONE work on classes
+add potion drops to combat
+add armor to negate some of the damage
