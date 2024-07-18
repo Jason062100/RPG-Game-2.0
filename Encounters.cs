@@ -9,7 +9,11 @@ namespace Jason
     public class Encounters
     {
         static Random random = new Random();
-        public static int userH = Program.currentPlayer.health;
+        static Player player = new Player();
+        static Enemies enemy = new Enemies();
+        static Loot loot = new Loot();
+        public static int userH = player.health;
+        static string playerClass = Program.currentPlayer.Class;
 
         //Combat Encounter
         public static void Combat(string name, int power, int health)
@@ -17,8 +21,180 @@ namespace Jason
             string n = name;
             int p = power;
             int h = health;
+            List<string> attacks;
 
-            if (userH > 0)
+            Console.WriteLine($"All of the sudden a {n} appears with {h} health. You have no choice but to fight.");
+
+
+            while (h > 0 && userH > 0) //While the enemy and user are alive
+            {
+                Console.WriteLine("|=======================|");
+                Console.WriteLine("| 1. Attack | 2. Potion |");
+                Console.WriteLine("|=======================|");
+                int input = Convert.ToInt32(Console.ReadLine());
+
+                switch (playerClass) //Checks what class the user is
+                {
+                    case "Warrior":
+                        if (input == 1)
+                        {
+                            attacks = player.WarriorAttackList();
+                            Console.WriteLine("Which attack would you like to use?");
+                            Console.WriteLine("|===================================|");
+                            Console.WriteLine($"| 1. {attacks[0]}       | 2. {attacks[1]} |");
+                            Console.WriteLine("|===================================|");
+
+                            int attackChoice1 = Convert.ToInt32(Console.ReadLine());
+                            bool x = true;
+                            while (x)
+                            {
+                                //Attack choices
+                                if (attackChoice1 == 1)
+                                {
+                                    h = player.Stab(h, n);
+                                    x = false;
+                                }
+                                else if (attackChoice1 == 2)
+                                {
+                                    h = player.OverheadSwing(h, n);
+                                    x = false;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid input. Please type a valid attack:");
+                                    attackChoice1 = Convert.ToInt32(Console.ReadLine());
+                                }
+                            }
+                            //Enemy Attack
+                            if (h > 0)
+                            {
+                                userH = enemy.EnemyAttack(userH, p, n); //User health after enemy attack
+                            }
+                            else if (h <= 0)
+                            {
+                                int goldDropped = loot.GoldDrop();
+                                player.gold += goldDropped;
+
+                                Console.WriteLine($"You killed the {n}. The {n} dropped {goldDropped} gold. You now have {player.gold} gold.");
+                            }
+
+                        }
+                        //Use Potion
+                        else if (input == 2)
+                        {
+                            UsePotion();
+                        }
+
+                        break;
+
+                    case "Mage":
+                        if (input == 1)
+                        {
+                            attacks = player.MageAttackList();
+                            Console.WriteLine("Which attack would you like to use?");
+                            Console.WriteLine("|===================================|");
+                            Console.WriteLine($"| 1. {attacks[0]}     | 2. {attacks[1]} |");
+                            Console.WriteLine("|===================================|");
+
+                            int attackChoice2 = Convert.ToInt32(Console.ReadLine());
+                            bool x = true;
+                            while (x)
+                            {
+                                if (attackChoice2 == 1)
+                                {
+                                    h = player.Fireball(h, n);
+                                    x = false;
+                                }
+                                else if (attackChoice2 == 2)
+                                {
+                                    h = player.MagicMissle(h, n);
+                                    x = false;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid input. Please type a valid attack:");
+                                    attackChoice2 = Convert.ToInt32(Console.ReadLine());
+                                }
+                                //Enemy Attack
+                                if (h > 0)
+                                {
+                                    userH = enemy.EnemyAttack(userH, p, n); //User health after enemy attack
+                                }
+                                else if (h <= 0)
+                                {
+                                    int goldDropped = loot.GoldDrop();
+                                    player.gold += goldDropped;
+
+                                    Console.WriteLine($"You killed the {n}. The {n} dropped {goldDropped} gold. You now have {player.gold} gold.");
+                                }
+
+                            }
+                        }
+                        //Use Potion
+                        else if (input == 2)
+                        {
+                            UsePotion();
+                        }
+
+                        break;
+
+                    case "Rogue":
+                        if (input == 1)
+                        {
+                            attacks = player.RogueAttackList();
+                            Console.WriteLine("Which attack would you like to use?");
+                            Console.WriteLine("|===============================|");
+                            Console.WriteLine($"| 1. {attacks[0]} | 2. {attacks[1]} |");
+                            Console.WriteLine("|===============================|");
+
+                            int attackChoice3 = Convert.ToInt32(Console.ReadLine());
+                            bool x = true;
+                            while (x)
+                            {
+                                if (attackChoice3 == 1)
+                                {
+                                    h = player.FuryStrike(h, n);
+                                    x = false;
+                                }
+                                else if (attackChoice3 == 2)
+                                {
+                                    h = player.Backstab(h, n);
+                                    x = false;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid input. Please type a valid attack:");
+                                    attackChoice3 = Convert.ToInt32(Console.ReadLine());
+                                }
+                                //Enemy Attack
+                                if (h > 0)
+                                {
+                                    userH = enemy.EnemyAttack(userH, p, n); //User health after enemy attack
+                                }
+                                else if (h <= 0)
+                                {
+                                    int goldDropped = loot.GoldDrop();
+                                    player.gold += goldDropped;
+
+                                    Console.WriteLine($"You killed the {n}. The {n} dropped {goldDropped} gold. You now have {player.gold} gold.");
+                                }
+                            }
+                        }
+                        //Use Potion
+                        else if (input == 2)
+                        {
+                            UsePotion();
+                        }
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+
+            /*if (userH > 0)
             {
                 Console.WriteLine($"All of the sudden a {n} appears with {h} health. You have no choice but to fight.");
 
@@ -30,7 +206,7 @@ namespace Jason
                     {
                         if (Convert.ToInt32(input) == 1)
                         {
-                            Console.WriteLine($"Would you like to use 1. {Program.currentPlayer.warriorLightAttack} or 2. {Program.currentPlayer.warriorHeavyAttack}");
+                            Console.WriteLine($"");
                             string attackChoice = Console.ReadLine();
                             if (Convert.ToInt32(attackChoice) == 1)
                             {
@@ -92,7 +268,7 @@ namespace Jason
                 {
                     Console.WriteLine($"The {n} killed you. Your adventure is over.");
                 }
-            }
+            }*/
         }
 
 
