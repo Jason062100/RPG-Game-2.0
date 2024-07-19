@@ -15,11 +15,11 @@ namespace Jason
 
         //Player stuff
         public string Class = "";
-        public int health = 100;
+        public int health = 50;
         public static int damage = 20;
-        public int potions = 3;
+        public static int potions = 3;
         public int potionStrength = 10;
-        public int gold = 0;
+        public static int gold = 0;
 
         //Armor
         public int highArmor;
@@ -37,6 +37,7 @@ namespace Jason
             int warriorArmor = mediumArmor;
             int warriorDamage = damage;
         }
+
         //Warrior Attacks
         public List<string> WarriorAttacks = new List<string>();
         public List<string> WarriorAttackList()
@@ -45,7 +46,8 @@ namespace Jason
             WarriorAttacks.Add("Overhead Swing");
             return WarriorAttacks;
         }
-        //Warrior Light Attack
+
+        //Warrior Stab
         public int Stab(int h, string n)
         {
             int attack = random.Next(damage - 15, damage - 4); //5-15 dmg
@@ -58,7 +60,8 @@ namespace Jason
 
             return h;
         }
-        //Warrior Heavy Attack
+
+        //Warrior Overhead Swing
         public int OverheadSwing(int h, string n)
         {
             int attack = random.Next(0, damage + 11); //0-30 dmg
@@ -81,6 +84,7 @@ namespace Jason
             int mageArmor = lowArmor;
             int mageDamage = damage + 10;
         }
+
         //Mage Attacks
         public List<string> MageAttacks = new List<string>();
         public List<string> MageAttackList()
@@ -89,6 +93,7 @@ namespace Jason
             MageAttacks.Add("Magic Missle");
             return MageAttacks;
         }
+
         //Fireball
         public int Fireball(int h, string n)
         {
@@ -102,6 +107,7 @@ namespace Jason
 
             return h;
         }
+
         //Magic Missile
         public int MagicMissle(int h, string n)
         {
@@ -129,6 +135,7 @@ namespace Jason
             int rogueArmor = lowArmor;
             int rogueDamage = damage + crit;
         }
+
         //Rogue Attacks
         public List<string> RogueAttacks = new List<string>();
         public List<string> RogueAttackList()
@@ -137,10 +144,11 @@ namespace Jason
             RogueAttacks.Add("Back Stab");
             return RogueAttacks;
         }
+
         //Fury Strike
         public int FuryStrike(int h, string n)
         {
-            critChance = random.Next(1, 6); //1 in 5 chance
+            critChance = random.Next(1, 2); //1 in 5 chance
             if (critChance == 1)
             {
                 crit = 10;
@@ -161,6 +169,7 @@ namespace Jason
 
             return h;
         }
+
         //Backstab
         public int Backstab(int h, string n)
         {
