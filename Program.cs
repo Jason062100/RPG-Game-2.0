@@ -21,18 +21,27 @@ namespace Jason
                 Start();
                 Encounters.ResetPlayer();
 
-                
+
                 //Encounters
-                Encounters.Combat("Zombie", 10, 30);
 
-                Encounters.Combat("Goblin", 10, 30);
+                if (Encounters.userH > 0) Encounters.Combat("Zombie", 10, 30); //(Name, Power, Health)
 
-                Encounters.Combat("Skeleton Knight", 20, 50);
+                if (Encounters.userH > 0) Encounters.Combat("Goblin", 15, 40);
+
+                if (Encounters.userH > 0) Encounters.Combat("Skeleton Knight", 20, 50);
+
+
 
                 //Win
-                if (currentPlayer.health > 0)
+                if (Encounters.userH > 0)
                 {
                     Console.WriteLine("You win. Congrats!");
+                }
+
+                //Lose
+                if (Encounters.userH <= 0)
+                {
+                    Console.WriteLine($"You have been slain. Your adventure is over. GG.");
                 }
 
                 //Play again
