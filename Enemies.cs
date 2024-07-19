@@ -18,6 +18,11 @@ namespace Jason
 
             int newPlayerHealth = playerHealth - enemyAttack;
 
+            if (newPlayerHealth < 0)
+            {
+                newPlayerHealth = 0;
+            }
+
             Console.WriteLine($"The {n} hit you back for {enemyAttack} damage leaving you on {newPlayerHealth} health.");
 
             return newPlayerHealth;
