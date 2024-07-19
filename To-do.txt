@@ -1,5 +1,14 @@
 DONE make enemyattack() and get rid of it from combat()
 DONE make combat see what class you are using to determine what attacks and stuff to use
 DONE work on classes
-add potion drops to combat
+DONE add potion drops to combat
+
 add armor to negate some of the damage
+make attacks more unique w/ status effects   MAGE: fireball BIG dammy but miss chance, magic missle has 8 possible hits   WARRIOR: stab has a bleed chance, overhead strike has a stun chance   ROGUE: Backstab can only hit when in the shadows, Slip into the shadows move, Poison blade attack
+create status effects for enemies
+rogue needs evasiveness, replace fury strikes with poison blade attack
+add weapons
+add a shop to buy stuff (potions, weapons, items)
+create dungeons with several enemies and can only visit shop after each dungeon, resets health after exiting
+
+make game harder
