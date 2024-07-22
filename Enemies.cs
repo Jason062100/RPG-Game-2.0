@@ -14,8 +14,35 @@ namespace Jason
         //Enemy Attack
         public int EnemyAttack(int playerHealth, int p, string n)
         {
+            int armor;
             int enemyAttack = random.Next(0, p + 1);
 
+            switch (Program.currentPlayer.Class)
+            {
+                case "Warrior":
+                    armor = random.Next(0, Program.currentPlayer.highArmor + 1);
+                    enemyAttack -= armor;
+                    Console.WriteLine($"{armor} damage was negated by your armor.");
+                    break;
+                
+                case "Mage":
+                    armor = random.Next(0, Program.currentPlayer.lowArmor + 1);
+                    enemyAttack -= armor;
+                    Console.WriteLine($"{armor} damage was negated by your armor.");
+                    break;
+
+                case "Rogue":
+                    armor = random.Next(0, Program.currentPlayer.lowArmor + 1);
+                    enemyAttack -= armor;
+                    Console.WriteLine($"{armor} damage was negated by your armor.");
+                    break;
+            }
+
+            if (enemyAttack < 0)
+            {
+                enemyAttack = 0;
+            }
+            
             int newPlayerHealth = playerHealth - enemyAttack;
 
             if (newPlayerHealth < 0)
