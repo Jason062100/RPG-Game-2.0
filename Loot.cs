@@ -25,8 +25,8 @@ namespace Jason
 
             if (gold != 0)
             {
-                Player.gold += gold;
-                Console.WriteLine($"The {n} dropped {gold} gold. You now have {Player.gold} gold.");
+                Program.currentPlayer.gold += gold;
+                Console.WriteLine($"The {n} dropped {gold} gold. You now have {Program.currentPlayer.gold} gold.");
             }
         }
 
@@ -42,8 +42,8 @@ namespace Jason
 
             if (potions != 0)
             {
-                Player.potions += potions;
-                Console.WriteLine($"The {n} dropped {potions} potion. You now have {Player.potions} potions.");
+                Program.currentPlayer.potions += potions;
+                Console.WriteLine($"The {n} dropped {potions} potion. You now have {Program.currentPlayer.potions} potions.");
             }
         }
     }
