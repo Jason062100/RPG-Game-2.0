@@ -18,31 +18,46 @@ namespace Jason
             while (playAgain == "y")
             {
                 //Starts game and resets player stats
-                Start();
+                Console.Title = "RPG Game";
                 Encounters.ResetPlayer();
+                Start();
 
 
                 //Encounters
 
-                if (Encounters.userH > 0) Encounters.Combat("Zombie", 10, 30); //(Name, Power, Health)
+                if (Encounters.userH > 0) Encounters.Combat("Zombie", 15, 30); //(Name, Power, Health)
+                Encounters.ResetStatus();
 
-                if (Encounters.userH > 0) Encounters.Combat("Goblin", 15, 40);
+                if (Encounters.userH > 0)
+                {
+                    Console.WriteLine("You stumble upon a hatch. Maybe this could be the way out...");
+                    Console.WriteLine("Press any key to continue.");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
 
-                if (Encounters.userH > 0) Encounters.Combat("Skeleton Knight", 20, 50);
+                if (Encounters.userH > 0) Encounters.Combat("Goblin", 20, 40);
+                Encounters.ResetStatus();
+
+                if (Encounters.userH > 0)
+                {
+                    Console.WriteLine("There is a lever on the wall. You decide to pull it and see a huge door that you thought was just a wall open.");
+                    Console.WriteLine("Press any key to continue.");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+
+                if (Encounters.userH > 0) Encounters.Combat("Skeleton Knight", 25, 50);
+                Encounters.ResetStatus();
 
 
 
                 //Win
-                if (Encounters.userH > 0)
-                {
-                    Console.WriteLine("You win. Congrats!");
-                }
+                if (Encounters.userH > 0) Console.WriteLine("You win. Congrats!");
+
 
                 //Lose
-                if (Encounters.userH <= 0)
-                {
-                    Console.WriteLine($"You have been slain. Your adventure is over. GG.");
-                }
+                if (Encounters.userH <= 0) Console.WriteLine($"You have been slain. Your adventure is over. GG.");
 
                 //Play again
                 Console.WriteLine("Would you like to play again? (y/n):");
@@ -53,6 +68,7 @@ namespace Jason
         static void Start()
         {
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Welcome to RPG Game. Which class would you like to play as? ");
             Console.WriteLine("1. Warrior  2. Mage  3. Rogue");
 
@@ -90,7 +106,7 @@ namespace Jason
                 }
             }
 
-            Console.WriteLine("You are trying to find your way out of this forest for a while now...");
+            Console.WriteLine("You have been trying to find your way out of this dungeon for a while now...");
         }
     }
 }
