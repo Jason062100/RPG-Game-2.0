@@ -46,5 +46,14 @@ namespace Jason
                 Console.WriteLine($"The {n} dropped {potions} potion. You now have {Program.currentPlayer.potions} potions.");
             }
         }
+
+        public void WeaponDrop()
+        {
+            if (Program.currentPlayer.Class == "Mage" && Program.currentPlayer.weapon != "Healing Staff")
+            {
+                Program.currentPlayer.weapon = "Healing Staff";
+                Console.WriteLine("You found a Healing Staff! Stats: 1 in 5 chance to heal 5 health after each turn.");
+            }
+        }
     }
 }
