@@ -20,12 +20,15 @@ namespace Jason
         //Combat Encounter
         public static void Combat(string name, int power, int health)
         {
+            //Enemy stats
             string n = name;
             int p = power;
             int h = health;
+            //Player attacks
             List<string> attacks;
             List<string> attackDetails;
-            int armor;
+
+            int potionUse = 0;
 
             Console.Write($"All of the sudden a ");
             Console.ForegroundColor = ConsoleColor.White;
@@ -43,26 +46,28 @@ namespace Jason
                 int input = Convert.ToInt32(Console.ReadLine());
 
 
-                if (input == 2) //Use Potion
+                if (input == 2 && potionUse == 0) //Use Potion
                 {
                     UsePotion();
+                    potionUse++;
                     continue;
                 }
+                else Console.WriteLine("You can only use one potion per turn!");
 
                 switch (Program.currentPlayer.Class) //Checks player class and adds attacks to list
                 {
                     case "Warrior":
-                        attacks = player.WarriorAttackList();
-                        attackDetails = player.WarriorAttackDetailsList();
+                        attacks = Program.currentPlayer.WarriorAttackList();
+                        attackDetails = Program.currentPlayer.WarriorAttackDetailsList();
                         break;
 
                     case "Mage":
-                        attacks = player.MageAttackList();
-                        attackDetails = player.MageAttackDetailsList();
+                        attacks = Program.currentPlayer.MageAttackList();
+                        attackDetails = Program.currentPlayer.MageAttackDetailsList();
                         break;
 
                     case "Rogue":
-                        attacks = player.RogueAttackList();
+                        attacks = Program.currentPlayer.RogueAttackList();
                         attackDetails = Program.currentPlayer.RogueAttackDetailsList();
                         break;
 
@@ -71,6 +76,7 @@ namespace Jason
                         return;
                 }
 
+                //Attack
                 Console.WriteLine("");
                 Console.WriteLine("Which attack would you like to use? Press 0 if you would like to see attack details.");
                 Console.WriteLine("|=======================================|");
@@ -79,7 +85,6 @@ namespace Jason
                 {
                     Console.WriteLine($"           {i}. {attacks[i - 1]}");
                 }
-
                 Console.WriteLine("|=======================================|");
 
                 int attackChoice = Convert.ToInt32(Console.ReadLine());
@@ -121,6 +126,25 @@ namespace Jason
                     }
                 }
 
+                //Reset potion use counter
+                potionUse = 0;
+
+                //Bleed
+                if (Program.currentPlayer.bleed == true && Program.currentPlayer.bleedTurn < 2 && h > 0) //If the enemy has bleed and has had it for 2 turns
+                {
+                    h -= 5;
+                    if (h < 0) h = 0;
+                    Console.WriteLine($"The {n} bleeds 5 health and now has {h} health.");
+                    Program.currentPlayer.bleedTurn++;
+                }
+
+                else if (Program.currentPlayer.bleed == true && Program.currentPlayer.bleedTurn >= 2)
+                {
+                    Program.currentPlayer.bleed = false;
+                    Program.currentPlayer.bleedTurn = 0;
+                }
+
+
                 //Enemy attack
                 if (h > 0 && player.stun == false && player.invis == false) //If the enemy is alive and isn't stunned, attack
                 {
@@ -148,13 +172,19 @@ namespace Jason
 
                     //Potion Drop
                     loot.PotionDrop(n);
+
+                    //Weapon Drop
+                    int weaponDropChance = 0;
+                    if (weaponDropChance == 0) loot.WeaponDrop();
                 }
 
-                if (player.weapon == "Healing Staff")
+                //If you have a healing staff, heal
+                if (Program.currentPlayer.weapon == "Healing Staff")
                 {
                     userH = weapons.HealingStaff(userH);
                 }
 
+                //Reset
                 attacks.Clear();
                 attackDetails.Clear();
             }
@@ -194,15 +224,17 @@ namespace Jason
             Program.currentPlayer.gold = 0;
             Program.currentPlayer.potions = 3;
             Program.currentPlayer.Class = "";
+            Program.currentPlayer.weapon = "";
         }
 
         //Reset status effects
         public static void ResetStatus()
         {
-            player.bleed = false;
-            player.bleedTurn = 0;
-            player.stun = false;
-            player.stunTurn = 0;
+            Program.currentPlayer.bleed = false;
+            Program.currentPlayer.bleedTurn = 0;
+            Program.currentPlayer.stun = false;
+            Program.currentPlayer.stunTurn = 0;
+            Program.currentPlayer.invis = false;
         }
 
 
@@ -219,6 +251,10 @@ namespace Jason
                 userH += potionStrength;
                 Program.currentPlayer.potions--;
                 Console.WriteLine($"You used 1 potion to heal {potionStrength} health. You now have {userH} health and {Program.currentPlayer.potions} potions left.");
+            }
+            else if (usePot == "n")
+            {
+                Console.WriteLine("Didn't use a potion.");
             }
             else
             {
