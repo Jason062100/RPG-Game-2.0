@@ -5,12 +5,14 @@ DONE add potion drops to combat
 DONE add armor to negate some of the damage
 DONE press 3 to see attack details
 DONE make attacks more unique w/ status effects   MAGE: fireball BIG dammy but miss chance (DONE), magic missle has 8 possible hits (DONE)   WARRIOR: stab has a bleed chance (DONE), overhead strike has a stun chance (DONE)   ROGUE: Backstab can only hit when in the shadows (DONE), Slip into the shadows move (DONE)
+DONE added mage health regen staff
+DONE make potions only available to use once per turn
 
 create status effects for enemies to apply on you
 rogue needs evasiveness
-add weapons (Warrior: Long Sword (more base and bleed damage), Mage: Health Regen Staff (DONE), Rogue: Poison Dagger)
+add weapons (Warrior: Long Sword (more base and bleed damage), Rogue: Poison Dagger)
 add a shop to buy stuff (potions, weapons, items)
 create dungeons with several enemies and can only visit shop after each dungeon, resets health after exiting
-make potions only available to use once per turn
+
 
 make game harder
