@@ -10,6 +10,7 @@ namespace Jason
     public class Program
     {
         public static Player currentPlayer = new Player();
+        public static Shop shop = new Shop();
 
         public static string playAgain = "y";
 
@@ -17,6 +18,8 @@ namespace Jason
         {
             while (playAgain == "y")
             {
+                shop.UseShop();
+
                 //Starts game and resets player stats
                 Console.Title = "RPG Game";
                 Encounters.ResetPlayer();
@@ -25,6 +28,7 @@ namespace Jason
 
                 //Encounters
 
+                //Encounter 1
                 if (Encounters.userH > 0) Encounters.Combat("Zombie", 15, 30); //(Name, Power, Health)
                 Encounters.ResetStatus();
 
@@ -36,6 +40,7 @@ namespace Jason
                     Console.Clear();
                 }
 
+                //Encounter 2
                 if (Encounters.userH > 0) Encounters.Combat("Goblin", 20, 40);
                 Encounters.ResetStatus();
 
@@ -47,7 +52,8 @@ namespace Jason
                     Console.Clear();
                 }
 
-                if (Encounters.userH > 0) Encounters.Combat("Skeleton Knight", 25, 50);
+                //Encounter 3
+                if (Encounters.userH > 0) Encounters.Combat("Skeleton Knight", 25, 60);
                 Encounters.ResetStatus();
 
 
@@ -75,6 +81,7 @@ namespace Jason
             int input = Convert.ToInt32(Console.ReadLine());
             bool x = true;
 
+            //Choose Class
             while (x)
             {
                 switch (input)
