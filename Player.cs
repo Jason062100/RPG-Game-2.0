@@ -13,10 +13,8 @@ namespace Jason
     {
         static Random random = new Random();
 
-        //Player stuff
+        //Player stats
         public string Class = "";
-        //Armor
-        public int armor;
         public string weapon = "";
         public int warriorArmor;
         public int mageArmor;
@@ -39,11 +37,8 @@ namespace Jason
         //Stun
         public bool stun = false;
         public int stunTurn = 0;
-        public bool skipEnemyAttack = false;
         //Invisible
         public bool invis = false;
-
-
 
 
         //Classes
@@ -63,7 +58,7 @@ namespace Jason
         public List<string> WarriorAttackDetails = new List<string>();
         public List<string> WarriorAttackDetailsList()
         {
-            WarriorAttackDetails.Add("Stab does 5-15 damage. Has a 1 in 5 chance of inflicting bleed.");
+            WarriorAttackDetails.Add("Stab does 5-15 damage. Has a 1 in 5 chance of inflicting bleed and lasts for 2 turns.");
             WarriorAttackDetails.Add("Overhead Swing does 0-30 damage. Has a 1 in 5 chance of inflicting stun.");
             return WarriorAttackDetails;
         }
@@ -72,27 +67,17 @@ namespace Jason
         public int Stab(int h, string n)
         {
             int attack = random.Next(damage - 15, damage - 4); //5-15 dmg
-
-            int bleedChance = random.Next(0, 5); //1/5 chance of bleed
-            if (bleedChance == 0 && bleedTurn == 0)
-            {
-                bleed = true;
-                Console.WriteLine($"You inflicted bleed on the {n}.");
-                bleedTurn++;
-            }
-            if (bleed == true)
-            {
-                attack += 5;
-                Console.WriteLine($"The {n} bleeds 5 health.");
-            }
-
             h -= attack;
-            if (h < 0)
-            {
-                h = 0;
-            }
+            if (h < 0) h = 0;
             Console.WriteLine($"You used Stab on the {n} for {attack} damage leaving the {n} with {h} health.");
 
+            //Bleed
+            int bleedChance = random.Next(0, 5); //1/5 chance of bleed
+            if (bleedChance == 0 && bleedTurn == 0) //If you get bleed and the enemy has had it for less less than 2 turns
+            {
+                Program.currentPlayer.bleed = true;
+                Console.WriteLine($"You inflicted bleed on the {n}.");
+            }
 
             return h;
         }
@@ -100,20 +85,19 @@ namespace Jason
         //Warrior Overhead Swing
         public int OverheadSwing(int h, string n)
         {
+            int attack = random.Next(0, damage + 11); //0-30 dmg
+            h -= attack;
+            if (h < 0) h = 0;
+
+            Console.WriteLine($"You used Overhead Swing on the {n} for {attack} damage leaving the {n} with {h} health.");
+
+            //Stun
             int stunChance = random.Next(0, 5); //1/5 chance to stun
             if (stunChance == 0)
             {
                 stun = true;
                 Console.WriteLine("You inflicted stun on the enemy.");
             }
-
-            int attack = random.Next(0, damage + 11); //0-30 dmg
-            h -= attack;
-            if (h < 0)
-            {
-                h = 0;
-            }
-            Console.WriteLine($"You used Overhead Swing on the {n} for {attack} damage leaving the {n} with {h} health.");
 
             return h;
         }
@@ -155,10 +139,8 @@ namespace Jason
             }
 
             h -= attack;
-            if (h < 0)
-            {
-                h = 0;
-            }
+            if (h < 0) h = 0;
+
             Console.WriteLine($"You used Fireball on the {n} for {attack} damage leaving the {n} with {h} health.");
 
             return h;
@@ -172,11 +154,9 @@ namespace Jason
             attack *= hits;
 
             h -= attack;
-            if (h < 0)
-            {
-                h = 0;
-            }
-            Console.WriteLine($"You used Magic Missile on the {n} for {attack} damage leaving the {n} with {h} health.");
+            if (h < 0) h = 0;
+
+            Console.WriteLine($"You used Magic Missile for {hits} on the {n} for {attack} damage leaving the {n} with {h} health.");
 
             return h;
         }
@@ -214,23 +194,15 @@ namespace Jason
         public int FuryStrike(int h, string n)
         {
             critChance = random.Next(1, 6); //1 in 5 chance
-            if (critChance == 1)
-            {
-                crit = 10;
-            }
+            if (critChance == 1) crit = 10;
 
             int attack = random.Next(damage - 10, damage + 1) + crit; // 10-20
             h -= attack;
-            if (h < 0)
-            {
-                h = 0;
-            }
+            if (h < 0) h = 0;
 
             Console.WriteLine($"You used Fury Strike on the {n} for {attack} damage leaving the {n} with {h} health.");
-            if (crit != 0)
-            {
-                Console.WriteLine($"You landed a critical hit for {crit} extra damage!");
-            }
+
+            if (crit != 0) Console.WriteLine($"You landed a critical hit for {crit} extra damage!");
 
             if (invis == true) Console.WriteLine("You left the shadows.");
             invis = false;
@@ -250,12 +222,10 @@ namespace Jason
             {
                 int attack = random.Next(damage + 5, damage + 16); // 25-35
                 h -= attack;
-                if (h < 0)
-                {
-                    h = 0;
-                }
+                if (h < 0) h = 0;
+
                 Console.WriteLine($"You used Back Stab on the {n} for {attack} damage leaving the {n} with {h} health.");
-                
+
                 Console.WriteLine("You left the shadows.");
                 invis = false;
             }
@@ -273,9 +243,7 @@ namespace Jason
                 Console.WriteLine("You hid in the shadows.");
             }
 
-            else {
-                Console.WriteLine("You failed to hide.");
-            }
+            else Console.WriteLine("You failed to hide.");
         }
     }
 }
