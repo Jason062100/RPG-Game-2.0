@@ -9,22 +9,19 @@ namespace Jason
     public class Weapons
     {
         Random random = new Random();
-        Player player = new Player();
 
-        public int HealingStaff(int userH)
+        public int HealingStaff(Player player)
         {
-            int health = userH;
+            int health = 0;
 
-            int healChance = random.Next(0, 5); // 1/5 chance to heal
+            int healChance = random.Next(0, 3); // 1 in 3 chance to heal
             if (healChance == 0) 
             {
-                health += 5;
-                Console.WriteLine($"Your Healing Staff healed you for 5 health. Your health is now: {health}.");
+                health = 5;
+                Console.WriteLine($"Your Healing Staff healed you for 5 health! Your health is now: {health}.");
             }
 
             return health;
         }
-
-
     }
 }
