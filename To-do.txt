@@ -7,12 +7,17 @@ DONE press 3 to see attack details
 DONE make attacks more unique w/ status effects   MAGE: fireball BIG dammy but miss chance (DONE), magic missle has 8 possible hits (DONE)   WARRIOR: stab has a bleed chance (DONE), overhead strike has a stun chance (DONE)   ROGUE: Backstab can only hit when in the shadows (DONE), Slip into the shadows move (DONE)
 DONE added mage health regen staff
 DONE make potions only available to use once per turn
+DONE add a shop to buy stuff (potions)
+DONE create dungeons with several enemies and can only visit shop after each dungeon
 
+Make level up
+Make backstab usable if you aren't invis but do more damage if you are, make fury strike do more damage if invis
+Move enemy status effects to enemy class and have seperate player effects
 create status effects for enemies to apply on you
 rogue needs evasiveness
 add weapons (Warrior: Long Sword (more base and bleed damage), Rogue: Poison Dagger)
-add a shop to buy stuff (potions, weapons, items)
-create dungeons with several enemies and can only visit shop after each dungeon, resets health after exiting
+add stuff to shop
+reset health after exiting dungeon
 
 
 make game harder
