@@ -10,43 +10,73 @@ namespace Jason
     public class Enemies
     {
         static Random random = new Random();
+        static Loot loot = new Loot();
 
-        //Enemy Attack
-        public int EnemyAttack(int playerHealth, int p, string n)
+        //Enemy attack rewrite
+        public void EnemyAttack(Player player, string n, int p, int h)
         {
-            int armor;
-            int enemyAttack = random.Next(0, p + 1);
-
-            switch (Program.currentPlayer.Class) //Checks class, uses armor for that class, and negates damage based on armor
+            //If the enemy is alive and isn't stunned and the player isn't invis
+            if (h > 0 && player.Stun == false && player.Invis == false)
             {
-                case "Warrior":
-                    armor = random.Next(0, Program.currentPlayer.highArmor + 1);
-                    enemyAttack -= armor;
-                    Console.WriteLine($"{armor} damage from the enemy is negated by your armor.");
-                    break;
+                int enemyAttack = random.Next(0, p + 1);
+                int armor;
                 
-                case "Mage":
-                    armor = random.Next(0, Program.currentPlayer.lowArmor + 1);
-                    enemyAttack -= armor;
-                    Console.WriteLine($"{armor} damage from the enemy is negated by your armor.");
-                    break;
+                //Checks class, uses armor for that class to negate damage
+                switch (player.Class) 
+                {
+                    case "Warrior":
+                        armor = random.Next(5, player.warriorArmor + 1);
+                        enemyAttack -= armor;
+                        Console.WriteLine($"{armor} damage from the enemy is negated by your armor.");
+                        break;
 
-                case "Rogue":
-                    armor = random.Next(0, Program.currentPlayer.lowArmor + 1);
-                    enemyAttack -= armor;
-                    Console.WriteLine($"{armor} damage from the enemy is negated by your armor.");
-                    break;
+                    case "Mage":
+                        armor = random.Next(5, player.mageArmor + 1);
+                        enemyAttack -= armor;
+                        Console.WriteLine($"{armor} damage from the enemy is negated by your armor.");
+                        break;
+
+                    case "Rogue":
+                        armor = random.Next(5, player.rogueArmor + 1);
+                        enemyAttack -= armor;
+                        Console.WriteLine($"{armor} damage from the enemy is negated by your armor.");
+                        break;
+                }
+                if (enemyAttack < 0) enemyAttack = 0;
+                player.TakeDamage(enemyAttack);
             }
 
-            if (enemyAttack < 0) enemyAttack = 0; //If enemy is dead, don't attack
-            
-            int newPlayerHealth = playerHealth - enemyAttack;
+            //If the enemy is alive and stunned
+            else if (h > 0 && player.Stun == true)
+            {
+                Console.WriteLine("The enemy is stunned and cannot attack until next turn.");
+                player.Stun = false;
+            }
 
-            if (newPlayerHealth < 0) newPlayerHealth = 0; //If player health drops below 0, set to 0
+            //If the player is invis, skip attack
+            else if (h > 0 && player.Invis == true)
+            {
+                Console.WriteLine("The enemy doesn't know where you are.");
+            }
 
-            Console.WriteLine($"The {n} hit you back for {enemyAttack} damage leaving you on {newPlayerHealth} health.");
+            //If the enemy is dead
+            else if (h <= 0)
+            {
+                Console.WriteLine($"You killed the {n}!");
 
-            return newPlayerHealth;
+                //Gold Drop
+                loot.GoldDrop(player, n);
+
+                //Potion Drop
+                loot.PotionDrop(player, n);
+
+                //Weapon Drop
+                loot.WeaponDrop(player);
+
+                //Reset status effects
+                player.Bleed = false;
+                player.Stun = false;
+            }
         }
     }
 }
