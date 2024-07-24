@@ -13,35 +13,96 @@ namespace Jason
     {
         static Random random = new Random();
 
+        public int Health { get; private set; }
+        public int Level { get; private set; }
+        public int Experience { get; private set; }
+        
+        public Player(int initialHealth, int initialLevel, int initialExperience)
+        {
+            Health = initialHealth;
+            Level = initialLevel;
+            Experience = initialExperience;
+        }
+
+
+        //Property to manage bleed status
+        public bool Bleed { get; set; }
+        //Method to inflict bleed
+        public void InflictBleed()
+        {
+            Bleed = true;
+        }
+        //Bleed turn
+        public int bleedTurn = 0;
+
+        //Property to manage stun status
+        public bool Stun { get; set; }
+        //Method to inflict stun
+        public void InflictStun()
+        {
+            Stun = true;
+        }
+
+        //Property to manage stun status
+        public bool Invis { get; set; }
+        //Method to inflict invis
+        public void InflictInvis()
+        {
+            Invis = true;
+        }
+
+
+        //Property to manage Class
+        public string Class { get; set; }
+        //Method to choose class
+        public void ChooseClass(string value)
+        {
+            Class = value;
+        }
+        
+
         //Player stats
-        public string Class = "";
-        public string weapon = "";
-        public int warriorArmor;
-        public int mageArmor;
-        public int rogueArmor;
-        public int health = 100;
+        public string Weapon { get; set; }
         public int damage = 20;
         public int potions = 3;
         public int potionStrength = 10;
         public int gold = 0;
+        public int xp = 0;
 
         //Armor
-        public int highArmor = 10;
-        public int mediumArmor = 7;
-        public int lowArmor = 4;
+        public int warriorArmor = 10;
+        public int mageArmor = 5;
+        public int rogueArmor = 5;
 
         //Status Effects
-        //Bleed
-        public bool bleed = false;
-        public int bleedTurn = 0;
         //Stun
-        public bool stun = false;
         public int stunTurn = 0;
-        //Invisible
-        public bool invis = false;
+        
 
+        //Level Up
+        public void LevelUp()
+        {
+            Level++;
+            Health += 10;
+            Console.WriteLine($"Congratulations! You level up to level {Level}.");
+            Console.WriteLine($"Your health is now {Health}.");
+        }
 
-        //Classes
+        //Take Damage
+        public void TakeDamage(int damage)
+        {
+            Health -= damage;
+            if (Health < 0) Health = 0;
+            Console.WriteLine($"You took {damage} damage and you now have {Health} health.");
+        }
+
+        public void Heal(int heal)
+        {
+            Health += heal;
+        }
+
+        
+
 
         //Warrior
 
@@ -75,7 +136,7 @@ namespace Jason
             int bleedChance = random.Next(0, 5); //1/5 chance of bleed
             if (bleedChance == 0 && bleedTurn == 0) //If you get bleed and the enemy has had it for less less than 2 turns
             {
-                Program.currentPlayer.bleed = true;
+                InflictBleed();
                 Console.WriteLine($"You inflicted bleed on the {n}.");
             }
 
@@ -95,7 +156,7 @@ namespace Jason
             int stunChance = random.Next(0, 5); //1/5 chance to stun
             if (stunChance == 0)
             {
-                stun = true;
+                InflictStun();
                 Console.WriteLine("You inflicted stun on the enemy.");
             }
 
@@ -156,7 +217,7 @@ namespace Jason
             h -= attack;
             if (h < 0) h = 0;
 
-            Console.WriteLine($"You used Magic Missile for {hits} on the {n} for {attack} damage leaving the {n} with {h} health.");
+            Console.WriteLine($"You used Magic Missile {hits} times on the {n} for {attack} damage leaving the {n} with {h} health.");
 
             return h;
         }
@@ -164,11 +225,10 @@ namespace Jason
 
 
 
+        //Rogue
+
         //Crit
         static int critChance;
-        static int crit = 0;
-
-        //Rogue
 
         //Rogue Attacks
         public List<string> RogueAttacks = new List<string>();
@@ -193,19 +253,21 @@ namespace Jason
         //Fury Strike
         public int FuryStrike(int h, string n)
         {
-            critChance = random.Next(1, 6); //1 in 5 chance
-            if (critChance == 1) crit = 10;
+            int crit = 0;
+            critChance = random.Next(0, 5); //1 in 5 chance
+            if (critChance == 0) crit = 10;
 
-            int attack = random.Next(damage - 10, damage + 1) + crit; // 10-20
+            int attack = random.Next(damage - 10, damage + 1) + crit; // 10-20 + 10 crit
             h -= attack;
             if (h < 0) h = 0;
 
             Console.WriteLine($"You used Fury Strike on the {n} for {attack} damage leaving the {n} with {h} health.");
 
-            if (crit != 0) Console.WriteLine($"You landed a critical hit for {crit} extra damage!");
+            if (critChance == 0) Console.WriteLine($"You landed a critical hit for {crit} extra damage!");
 
-            if (invis == true) Console.WriteLine("You left the shadows.");
-            invis = false;
+            if (Invis == true) Console.WriteLine("You left the shadows.");
+            Invis = false;
+            crit = 0;
 
             return h;
         }
@@ -213,7 +275,7 @@ namespace Jason
         //Backstab
         public int Backstab(int h, string n)
         {
-            if (invis == false)
+            if (Invis == false)
             {
                 Console.WriteLine("Backstab can only be used while hidden in the shadows.");
             }
@@ -227,7 +289,7 @@ namespace Jason
                 Console.WriteLine($"You used Back Stab on the {n} for {attack} damage leaving the {n} with {h} health.");
 
                 Console.WriteLine("You left the shadows.");
-                invis = false;
+                Invis = false;
             }
 
             return h;
@@ -239,7 +301,7 @@ namespace Jason
 
             if (hide == 0)
             {
-                invis = true;
+                InflictInvis();
                 Console.WriteLine("You hid in the shadows.");
             }
 
