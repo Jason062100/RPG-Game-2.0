@@ -25,7 +25,7 @@ namespace Jason
             if (gold != 0)
             {
                 player.gold += gold;
-                Console.WriteLine($"The {n} dropped {gold} gold. You now have {player.gold} gold.");
+                Console.WriteLine($"The {n} dropped {gold} gold. Player gold: {player.gold}");
             }
         }
 
@@ -42,7 +42,7 @@ namespace Jason
             if (potions != 0)
             {
                 player.potions += potions;
-                Console.WriteLine($"The {n} dropped {potions} potion. You now have {player.potions} potions.");
+                Console.WriteLine($"The {n} dropped {potions} potion. Player potions: {player.potions}");
             }
         }
 
@@ -57,6 +57,18 @@ namespace Jason
                     Console.WriteLine("You found a Healing Staff! Stats: 1 in 5 chance to heal 5 health after each turn.");
                 }
             }
+        }
+
+        public void XpDrop(Player player, string n)
+        {
+            int xp = random.Next(5, 11); //5 to 10 xp
+
+            player.Experience += xp;
+
+            Console.WriteLine($"The {n} dropped {xp} experience. Player EXP: {player.Experience}");
+
+            if (player.Experience >= 20) player.LevelUp();
+
         }
     }
 }
