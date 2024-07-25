@@ -15,13 +15,15 @@ namespace Jason
 
         public int Health { get; private set; }
         public int Level { get; private set; }
-        public int Experience { get; private set; }
-        
-        public Player(int initialHealth, int initialLevel, int initialExperience)
+        public int Experience { get; set; }
+        public int MaxHealth { get; private set; }
+
+        public Player(int initialHealth, int initialLevel, int initialExperience, int initialMaxHealth)
         {
             Health = initialHealth;
             Level = initialLevel;
             Experience = initialExperience;
+            MaxHealth = initialMaxHealth;
         }
 
 
@@ -59,7 +61,7 @@ namespace Jason
         {
             Class = value;
         }
-        
+
 
         //Player stats
         public string Weapon { get; set; }
@@ -77,15 +79,27 @@ namespace Jason
         //Status Effects
         //Stun
         public int stunTurn = 0;
-        
+
 
         //Level Up
         public void LevelUp()
         {
             Level++;
-            Health += 10;
-            Console.WriteLine($"Congratulations! You level up to level {Level}.");
-            Console.WriteLine($"Your health is now {Health}.");
+            Experience -= 20;
+            Console.WriteLine($"Congratulations! You leveled up to level {Level}! Player EXP: {Experience}");
+            Console.Write($"Your health has been increased from {MaxHealth} to");
+            MaxHealth += 10;
+            Console.WriteLine($" {MaxHealth}!");
+            //heal a little?
+        }
+
+        public void BeatDungeon()
+        {
+            Health = MaxHealth;
+            Console.WriteLine("You make a campfire in a small clearing that looks safe. After cooking and eating, you fall asleep under the stars.");
+            Console.WriteLine("You healed back to max health.");
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
         }
 
         //Take Damage
@@ -93,7 +107,7 @@ namespace Jason
         {
             Health -= damage;
             if (Health < 0) Health = 0;
-            Console.WriteLine($"You took {damage} damage and you now have {Health} health.");
+            Console.WriteLine($"You took {damage} damage. Player health: {Health}");
         }
 
         public void Heal(int heal)
@@ -101,7 +115,7 @@ namespace Jason
             Health += heal;
         }
 
-        
+
 
 
         //Warrior
@@ -130,7 +144,7 @@ namespace Jason
             int attack = random.Next(damage - 15, damage - 4); //5-15 dmg
             h -= attack;
             if (h < 0) h = 0;
-            Console.WriteLine($"You used Stab on the {n} for {attack} damage leaving the {n} with {h} health.");
+            Console.WriteLine($"You used Stab on the {n} for {attack} damage. Enemy health: {h}");
 
             //Bleed
             int bleedChance = random.Next(0, 5); //1/5 chance of bleed
@@ -150,7 +164,7 @@ namespace Jason
             h -= attack;
             if (h < 0) h = 0;
 
-            Console.WriteLine($"You used Overhead Swing on the {n} for {attack} damage leaving the {n} with {h} health.");
+            Console.WriteLine($"You used Overhead Swing on the {n} for {attack} damage. Enemy health: {h}");
 
             //Stun
             int stunChance = random.Next(0, 5); //1/5 chance to stun
@@ -202,7 +216,7 @@ namespace Jason
             h -= attack;
             if (h < 0) h = 0;
 
-            Console.WriteLine($"You used Fireball on the {n} for {attack} damage leaving the {n} with {h} health.");
+            Console.WriteLine($"You used Fireball on the {n} for {attack} damage. Enemy health: {h}");
 
             return h;
         }
@@ -217,7 +231,7 @@ namespace Jason
             h -= attack;
             if (h < 0) h = 0;
 
-            Console.WriteLine($"You used Magic Missile {hits} times on the {n} for {attack} damage leaving the {n} with {h} health.");
+            Console.WriteLine($"You used Magic Missile {hits} times on the {n} for {attack} damage. Enemy health: {h}");
 
             return h;
         }
@@ -226,9 +240,6 @@ namespace Jason
 
 
         //Rogue
-
-        //Crit
-        static int critChance;
 
         //Rogue Attacks
         public List<string> RogueAttacks = new List<string>();
@@ -244,9 +255,9 @@ namespace Jason
         public List<string> RogueAttackDetails = new List<string>();
         public List<string> RogueAttackDetailsList()
         {
-            RogueAttackDetails.Add("Fury Strike does 10-20 damage. Has a 1 in 5 chance of getting a critical hit for 10 extra damage.");
-            RogueAttackDetails.Add("Back Stab does 25-35 damage. Can only be used while hidden in the shadows.");
-            RogueAttackDetails.Add("Shadows has a 1 in 3 chance to hide in the shadows.");
+            RogueAttackDetails.Add("1. Fury Strike does 10-20 damage and has a 1 in 5 chance of a critical hit for 10 extra damage. If you are invisible, it does 15-20 damage and a 1 in 3 chance for a critical hit..");
+            RogueAttackDetails.Add("2. Back Stab does 5-20 damage or 15-35 damage if you are invisible.");
+            RogueAttackDetails.Add("3. Shadows has a 1 in 2 chance to hide in the shadows. Each time you successfully hide, the chance goes up by 1. Resets after killing an enemy.");
             return RogueAttackDetails;
         }
 
@@ -254,20 +265,47 @@ namespace Jason
         public int FuryStrike(int h, string n)
         {
             int crit = 0;
-            critChance = random.Next(0, 5); //1 in 5 chance
-            if (critChance == 0) crit = 10;
+            int critChance = 0;
+            int attack;
 
-            int attack = random.Next(damage - 10, damage + 1) + crit; // 10-20 + 10 crit
-            h -= attack;
-            if (h < 0) h = 0;
+            switch (Invis)
+            {
+                case true: //If invis
+                    attack = random.Next(damage - 5, damage + 1); //15-20 damage (with crit: 25-35 damage)
+                    h -= attack;
+                    if (h < 0) h = 0;
+                    Console.WriteLine($"You used Fury Strike on the {n} for {attack} damage. Enemy health: {h}");
 
-            Console.WriteLine($"You used Fury Strike on the {n} for {attack} damage leaving the {n} with {h} health.");
+                    critChance = random.Next(0, 3); //1 in 3 chance
+                    if (critChance == 0)
+                    {
+                        crit = 10;
+                        h -= crit;
+                        if (h < 0) h = 0;
+                        Console.WriteLine($"You landed a critical hit for {crit} extra damage! Enemy health: {h}");
+                    }
+                    Console.WriteLine("You left the shadows.");
+                    Invis = false;
 
-            if (critChance == 0) Console.WriteLine($"You landed a critical hit for {crit} extra damage!");
+                    break;
 
-            if (Invis == true) Console.WriteLine("You left the shadows.");
-            Invis = false;
-            crit = 0;
+                case false: //If not invis
+                    attack = random.Next(damage - 10, damage + 1); //10-20 damage (with crit: 20-30 damage)
+                    h -= attack;
+                    if (h < 0) h = 0;
+                    Console.WriteLine($"You used Fury Strike on the {n} for {attack} damage. Enemy health: {h}");
+
+                    critChance = random.Next(0, 3); //1 in 5 chance
+                    if (critChance == 0)
+                    {
+                        crit = 10;
+                        h -= crit;
+                        if (h < 0) h = 0;
+                        Console.WriteLine($"You landed a critical hit for {crit} extra damage! Enemy health: {h}");
+                    }
+
+                    break;
+            }
 
             return h;
         }
@@ -275,34 +313,40 @@ namespace Jason
         //Backstab
         public int Backstab(int h, string n)
         {
-            if (Invis == false)
+            int attack;
+            switch (Invis)
             {
-                Console.WriteLine("Backstab can only be used while hidden in the shadows.");
-            }
+                case true: //If invis
+                    attack = random.Next(damage - 5, damage + 16); //15-35 damage
+                    h -= attack;
+                    if (h < 0) h = 0;
+                    Console.WriteLine($"You used Back Stab on the {n} for {attack} damage. Enemy health: {h}");
+                    Console.WriteLine("You left the shadows.");
+                    Invis = false;
+                    break;
 
-            else
-            {
-                int attack = random.Next(damage + 5, damage + 16); // 25-35
-                h -= attack;
-                if (h < 0) h = 0;
-
-                Console.WriteLine($"You used Back Stab on the {n} for {attack} damage leaving the {n} with {h} health.");
-
-                Console.WriteLine("You left the shadows.");
-                Invis = false;
+                case false: //If not invis
+                    attack = random.Next(damage - 15, damage); //5-20 damage
+                    h -= attack;
+                    if (h < 0) h = 0;
+                    Console.WriteLine($"You used Back Stab on the {n} for {attack} damage. Enemy health: {h}");
+                    break;
             }
 
             return h;
         }
 
+        public int shadowsUsage = 0;
         public void Shadows()
         {
-            int hide = random.Next(0, 3); //1/3 chance
+            int hide = random.Next(0, 2 + shadowsUsage); //1 in 2 chance + 1 every time you use it
 
             if (hide == 0)
             {
                 InflictInvis();
                 Console.WriteLine("You hid in the shadows.");
+                shadowsUsage++;
+                Console.WriteLine("You shadows chance is now 1 in " + (2 + shadowsUsage)".");
             }
 
             else Console.WriteLine("You failed to hide.");
