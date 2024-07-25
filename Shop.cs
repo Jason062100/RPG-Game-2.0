@@ -17,7 +17,8 @@ namespace Jason
             store.Add("POTION", 10);
             store.Add("EXAMPLE", 0);
 
-            Console.Write("You see a wandering trader on a donkey. Would you like to look at his wares? (y/n): ");
+            Console.Clear();
+            Console.WriteLine("You see a wandering trader on a donkey. Would you like to look at his wares? (y/n): ");
             string input = Console.ReadLine().ToLower();
 
             if (input == "y")
