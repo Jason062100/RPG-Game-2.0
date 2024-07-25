@@ -1,3 +1,4 @@
+--DONE--
 DONE make enemyattack() and get rid of it from combat()
 DONE make combat see what class you are using to determine what attacks and stuff to use
 DONE work on classes
@@ -9,9 +10,11 @@ DONE added mage health regen staff
 DONE make potions only available to use once per turn
 DONE add a shop to buy stuff (potions)
 DONE create dungeons with several enemies and can only visit shop after each dungeon
+DONE Make level up
+DONE Fury strike does more damage and better crit chance while invis, backstab does more damage if invis
 
-Make level up
-Make backstab usable if you aren't invis but do more damage if you are, make fury strike do more damage if invis
+--TO-DO--
+Make level up do more
 Move enemy status effects to enemy class and have seperate player effects
 create status effects for enemies to apply on you
 rogue needs evasiveness
