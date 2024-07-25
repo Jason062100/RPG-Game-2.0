@@ -73,9 +73,13 @@ namespace Jason
                 //Weapon Drop
                 loot.WeaponDrop(player);
 
+                //Xp Drop
+                loot.XpDrop(player, n);
+
                 //Reset status effects
                 player.Bleed = false;
                 player.Stun = false;
+                player.shadowsUsage = 0;
             }
         }
     }
