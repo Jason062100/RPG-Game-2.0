@@ -115,6 +115,7 @@ namespace Jason
                             for (int i = 0; i < attackDetails.Count; i++)
                             {
                                 Console.WriteLine($"{attackDetails[i]}");
+                                Console.WriteLine("");
                             }
                             Console.WriteLine("Which attack would you like to use?");
                             attackChoice = Convert.ToInt32(Console.ReadLine());
@@ -132,7 +133,7 @@ namespace Jason
                 {
                     h -= 5;
                     if (h < 0) h = 0;
-                    Console.WriteLine($"The {n} bleeds 5 health and now has {h} health.");
+                    Console.WriteLine($"The {n} bleeds 5 health. Enemy health: {h}");
                     player.bleedTurn++;
                 }
 
@@ -142,7 +143,7 @@ namespace Jason
                     player.bleedTurn = 0;
                 }
 
-                //Enemy attack rewrite
+                //Enemy attack
                 enemy.EnemyAttack(player, n, p, h);
 
 
@@ -187,7 +188,7 @@ namespace Jason
                 int potionStrength = random.Next(5, player.potionStrength);
                 player.Heal(potionStrength);
                 player.potions--;
-                Console.WriteLine($"You used 1 potion to heal {potionStrength} health. You now have {player.Health} health and {player.potions} potions left.");
+                Console.WriteLine($"You used 1 potion to heal {potionStrength} health. Player health: {player.Health} Player potions: {player.potions}.");
             }
             else if (usePot == "n")
             {
