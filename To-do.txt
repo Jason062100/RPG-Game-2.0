@@ -12,15 +12,15 @@ DONE add a shop to buy stuff (potions)
 DONE create dungeons with several enemies and can only visit shop after each dungeon
 DONE Make level up
 DONE Fury strike does more damage and better crit chance while invis, backstab does more damage if invis
+DONE Move enemy status effects to enemy class
+DONE reset health after exiting dungeon
 
 --TO-DO--
 Make level up do more
-Move enemy status effects to enemy class and have seperate player effects
 create status effects for enemies to apply on you
-rogue needs evasiveness
 add weapons (Warrior: Long Sword (more base and bleed damage), Rogue: Poison Dagger)
 add stuff to shop
-reset health after exiting dungeon
+
 
 
 make game harder
