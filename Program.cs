@@ -18,6 +18,7 @@ namespace Jason
             while (playAgain == "y")
             {
                 Player player = new Player(100, 1, 0, 100); //100 health, level 1, starting xp, max health
+                
 
                 //Starts game
                 Console.Title = "RPG Game";
