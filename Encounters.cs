@@ -11,9 +11,10 @@ namespace Jason
     public class Encounters
     {
         static Random random = new Random();
-        static Enemies enemy = new Enemies();
         static Loot loot = new Loot();
         static Weapons weapons = new Weapons();
+        
+
         static List<string> attacks = new List<string>();
         static List<string> attackDetails = new List<string>();
 
@@ -128,23 +129,24 @@ namespace Jason
                     }
                 }
 
+                
                 //Bleed
-                if (player.Bleed == true && player.bleedTurn < 2 && h > 0) //If the enemy has bleed and it's less than 2 turns
+                if (Player.enemy.EnemyBleed == true && Player.enemy.enemyBleedTurn < 2 && h > 0) //If the enemy has bleed and it's less than 2 turns
                 {
                     h -= 5;
                     if (h < 0) h = 0;
                     Console.WriteLine($"The {n} bleeds 5 health. Enemy health: {h}");
-                    player.bleedTurn++;
+                    Player.enemy.enemyBleedTurn++;
                 }
 
-                else if (player.Bleed == true && player.bleedTurn >= 2) //If the enemy has bleed and it has been 2 turns
+                else if (Player.enemy.EnemyBleed == true && Player.enemy.enemyBleedTurn >= 2) //If the enemy has bleed and it has been 2 turns
                 {
-                    player.Bleed = false;
-                    player.bleedTurn = 0;
+                    Player.enemy.EnemyBleed = false;
+                    Player.enemy.enemyBleedTurn = 0;
                 }
 
                 //Enemy attack
-                enemy.EnemyAttack(player, n, p, h);
+                Player.enemy.EnemyAttack(player, n, p, h);
 
 
                 //If you have a healing staff, heal
