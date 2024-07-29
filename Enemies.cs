@@ -12,11 +12,29 @@ namespace Jason
         static Random random = new Random();
         static Loot loot = new Loot();
 
+        //Status effects
+        //Property to manage bleed status
+        public bool EnemyBleed { get; set; }
+        public int enemyBleedTurn = 0;
+
+        public bool EnemyStun { get; set; }
+
+        //Method to inflict enemy bleed
+        public void InflictBleed()
+        {
+            EnemyBleed = true;
+        }
+
+        public void InflictStun()
+        {
+            EnemyStun = true;
+        }
+
         //Enemy attack rewrite
         public void EnemyAttack(Player player, string n, int p, int h)
         {
             //If the enemy is alive and isn't stunned and the player isn't invis
-            if (h > 0 && player.Stun == false && player.Invis == false)
+            if (h > 0 && EnemyStun == false && player.Invis == false)
             {
                 int enemyAttack = random.Next(0, p + 1);
                 int armor;
@@ -47,10 +65,10 @@ namespace Jason
             }
 
             //If the enemy is alive and stunned
-            else if (h > 0 && player.Stun == true)
+            else if (h > 0 && EnemyStun == true)
             {
                 Console.WriteLine("The enemy is stunned and cannot attack until next turn.");
-                player.Stun = false;
+                EnemyStun = false;
             }
 
             //If the player is invis, skip attack
@@ -77,8 +95,9 @@ namespace Jason
                 loot.XpDrop(player, n);
 
                 //Reset status effects
-                player.Bleed = false;
-                player.Stun = false;
+                EnemyBleed = false;
+                enemyBleedTurn = 0;
+                EnemyStun = false;
                 player.shadowsUsage = 0;
             }
         }
