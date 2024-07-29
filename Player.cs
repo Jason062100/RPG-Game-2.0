@@ -11,12 +11,13 @@ namespace Jason
     //Player stats
     public class Player
     {
-        static Random random = new Random();
-
         public int Health { get; private set; }
         public int Level { get; private set; }
         public int Experience { get; set; }
         public int MaxHealth { get; private set; }
+
+        static Random random = new Random();
+        public static Enemies enemy = new Enemies();
 
         public Player(int initialHealth, int initialLevel, int initialExperience, int initialMaxHealth)
         {
@@ -26,26 +27,6 @@ namespace Jason
             MaxHealth = initialMaxHealth;
         }
 
-
-        //Property to manage bleed status
-        public bool Bleed { get; set; }
-        //Method to inflict bleed
-        public void InflictBleed()
-        {
-            Bleed = true;
-        }
-        //Bleed turn
-        public int bleedTurn = 0;
-
-        //Property to manage stun status
-        public bool Stun { get; set; }
-        //Method to inflict stun
-        public void InflictStun()
-        {
-            Stun = true;
-        }
-
-        //Property to manage stun status
         public bool Invis { get; set; }
         //Method to inflict invis
         public void InflictInvis()
@@ -76,18 +57,13 @@ namespace Jason
         public int mageArmor = 5;
         public int rogueArmor = 5;
 
-        //Status Effects
-        //Stun
-        public int stunTurn = 0;
-
-
         //Level Up
         public void LevelUp()
         {
             Level++;
             Experience -= 20;
             Console.WriteLine($"Congratulations! You leveled up to level {Level}! Player EXP: {Experience}");
-            Console.Write($"Your health has been increased from {MaxHealth} to");
+            Console.Write($"Your max health has been increased from {MaxHealth} to");
             MaxHealth += 10;
             Console.WriteLine($" {MaxHealth}!");
             //heal a little?
@@ -148,9 +124,9 @@ namespace Jason
 
             //Bleed
             int bleedChance = random.Next(0, 5); //1/5 chance of bleed
-            if (bleedChance == 0 && bleedTurn == 0) //If you get bleed and the enemy has had it for less less than 2 turns
+            if (bleedChance == 0 && enemy.enemyBleedTurn == 0) //If you get bleed and the enemy has had it for less less than 2 turns
             {
-                InflictBleed();
+                enemy.InflictBleed();
                 Console.WriteLine($"You inflicted bleed on the {n}.");
             }
 
@@ -170,7 +146,7 @@ namespace Jason
             int stunChance = random.Next(0, 5); //1/5 chance to stun
             if (stunChance == 0)
             {
-                InflictStun();
+                enemy.InflictStun();
                 Console.WriteLine("You inflicted stun on the enemy.");
             }
 
@@ -346,7 +322,7 @@ namespace Jason
                 InflictInvis();
                 Console.WriteLine("You hid in the shadows.");
                 shadowsUsage++;
-                Console.WriteLine("You shadows chance is now 1 in " + (2 + shadowsUsage)".");
+                Console.WriteLine("You shadows chance is now 1 in " + (2 + shadowsUsage) + ".");
             }
 
             else Console.WriteLine("You failed to hide.");
