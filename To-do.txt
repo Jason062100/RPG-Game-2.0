@@ -14,13 +14,15 @@ DONE Make level up
 DONE Fury strike does more damage and better crit chance while invis, backstab does more damage if invis
 DONE Move enemy status effects to enemy class
 DONE reset health after exiting dungeon
+DONE create status effects for enemies to apply on you
+DONE add Rogue Poison Dagger
+DONE Make weapons available to buy in shop
+DONE add warrior Flame Axe
 
 --TO-DO--
 Make level up do more
-create status effects for enemies to apply on you
-add weapons (Warrior: Long Sword (more base and bleed damage), Rogue: Poison Dagger)
 add stuff to shop
-
+add a way to make the story/dungeons different each time
 
 
 make game harder
