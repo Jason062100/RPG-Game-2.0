@@ -16,22 +16,97 @@ namespace Jason
         public int Experience { get; set; }
         public int MaxHealth { get; private set; }
 
+        //Player stats
+        public string Weapon { get; set; }
+        public double damage { get; set; }
+        public int potions = 3;
+        public int potionStrength = 11;
+        public int gold = 0;
+        public int xp = 0;
+
+        //Armor
+        public int warriorArmor = 10;
+        public int mageArmor = 5;
+        public int rogueArmor = 5;
+
+        //Properties for status effects
+        public bool bleed { get; set; }
+        public int bleedTurn = 0;
+        public bool stun { get; set; }
+        public bool Invis { get; set; }
+
+        public bool increaseDamage { get; set; }
+
+
         static Random random = new Random();
         public static Enemies enemy = new Enemies();
 
-        public Player(int initialHealth, int initialLevel, int initialExperience, int initialMaxHealth)
+        public Player(int initialHealth, int initialLevel, int initialExperience, int initialMaxHealth, int initialDamage)
         {
             Health = initialHealth;
             Level = initialLevel;
             Experience = initialExperience;
             MaxHealth = initialMaxHealth;
+            damage = initialDamage;
+
+            bleed = false;
+            bleedTurn = 0;
+            stun = false;
+            Invis = false;
+            increaseDamage = false;
         }
 
-        public bool Invis { get; set; }
+
+        //Method to inflict bleed
+        public void InflictBleed()
+        {
+            bleed = true;
+            Console.WriteLine("The enemy has inflicted bleed on you!");
+        }
+        //Method to inflict stun
+        public void InflictStun()
+        {
+            stun = true;
+            Console.WriteLine("The enemy has inflicted stun on you!");
+        }
+
         //Method to inflict invis
         public void InflictInvis()
         {
             Invis = true;
+        }
+
+
+        public void InflictStatus()
+        {
+            if (bleed == false && Invis == false) //If the player isn't bleeding already and the player isn't invis
+            {
+                int playerBleedChance = random.Next(0, 8); //1 in 8 change to bleed
+                if (playerBleedChance == 0) InflictBleed();
+            }
+
+            if (stun == false && Invis == false) //If the player isn't stunned already and the player isn't invis
+            {
+                int playerStunChance = random.Next(0, 8); //1 in 8 chance to be stunned
+                if (playerStunChance == 0) InflictStun();
+            }
+        }
+
+        public void IncreaseDamage(bool incDmg)
+        {
+            if (incDmg == false) //If you don't have a damage buff already, increase damage
+            {
+                damage *= 1.25;
+                Console.WriteLine("Your Flame Axe created a fiery aura around you that increased your attack.");
+                Console.WriteLine($"Your damage has been increased by 25%. Damage: {damage}");
+                increaseDamage = true;
+            }
+            else if (incDmg == true) //If you do have damage buff already, return damage back to normal
+            {
+                damage /= 1.25;
+                Console.WriteLine("Your fiery aura wore off. Your damage returned to normal.");
+                increaseDamage = false;
+            }
         }
 
 
@@ -42,20 +117,6 @@ namespace Jason
         {
             Class = value;
         }
-
-
-        //Player stats
-        public string Weapon { get; set; }
-        public int damage = 20;
-        public int potions = 3;
-        public int potionStrength = 10;
-        public int gold = 0;
-        public int xp = 0;
-
-        //Armor
-        public int warriorArmor = 10;
-        public int mageArmor = 5;
-        public int rogueArmor = 5;
 
         //Level Up
         public void LevelUp()
@@ -72,6 +133,11 @@ namespace Jason
         public void BeatDungeon()
         {
             Health = MaxHealth;
+            bleed = false;
+            bleedTurn = 0;
+            stun = false;
+            Invis = false;
+
             Console.WriteLine("You make a campfire in a small clearing that looks safe. After cooking and eating, you fall asleep under the stars.");
             Console.WriteLine("You healed back to max health.");
             Console.WriteLine("Press any key to continue.");
@@ -85,6 +151,14 @@ namespace Jason
             if (Health < 0) Health = 0;
             Console.WriteLine($"You took {damage} damage. Player health: {Health}");
         }
+
+        public void TakeBleedDamage(int damage)
+        {
+            Health -= damage;
+            if (Health < 0) Health = 0;
+            Console.WriteLine($"You bleed and lose 5 health. Player health: {Health}");
+        }
+
 
         public void Heal(int heal)
         {
@@ -117,9 +191,13 @@ namespace Jason
         //Warrior Stab
         public int Stab(int h, string n)
         {
-            int attack = random.Next(damage - 15, damage - 4); //5-15 dmg
+            int minAttack = (int)Math.Floor(damage - 15);
+            int maxAttack = (int)Math.Floor(damage - 4);
+
+            int attack = random.Next(minAttack, maxAttack); //5-15 dmg
             h -= attack;
             if (h < 0) h = 0;
+
             Console.WriteLine($"You used Stab on the {n} for {attack} damage. Enemy health: {h}");
 
             //Bleed
@@ -136,7 +214,9 @@ namespace Jason
         //Warrior Overhead Swing
         public int OverheadSwing(int h, string n)
         {
-            int attack = random.Next(0, damage + 11); //0-30 dmg
+            int maxAttack = (int)Math.Floor(damage + 11);
+
+            int attack = random.Next(0, maxAttack); //0-30 dmg
             h -= attack;
             if (h < 0) h = 0;
 
@@ -180,7 +260,10 @@ namespace Jason
         //Fireball
         public int Fireball(int h, string n)
         {
-            int attack = random.Next(damage, damage + 11); // 20-30
+            int minAttack = (int)Math.Floor(damage);
+            int maxAttack = (int)Math.Floor(damage + 11);
+
+            int attack = random.Next(minAttack, maxAttack); //20-30 dmg
 
             int missChance = random.Next(0, 3); //1/3 chance of missing
             if (missChance == 0)
@@ -200,8 +283,11 @@ namespace Jason
         //Magic Missile
         public int MagicMissle(int h, string n)
         {
+            int minAttack = (int)Math.Floor(damage - 19);
+            int maxAttack = (int)Math.Floor(damage - 15);
+
+            int attack = random.Next(minAttack, maxAttack); //1-3 dmg per hit
             int hits = random.Next(2, 9); //Can hit 2-8 times
-            int attack = random.Next(damage - 19, damage - 15); // 1-3 damage per hit (2-32)
             attack *= hits;
 
             h -= attack;
@@ -240,6 +326,8 @@ namespace Jason
         //Fury Strike
         public int FuryStrike(int h, string n)
         {
+            int minAttack;
+            int maxAttack;
             int crit = 0;
             int critChance = 0;
             int attack;
@@ -247,36 +335,49 @@ namespace Jason
             switch (Invis)
             {
                 case true: //If invis
-                    attack = random.Next(damage - 5, damage + 1); //15-20 damage (with crit: 25-35 damage)
+                    minAttack = (int)Math.Floor(damage - 5);
+                    maxAttack = (int)Math.Floor(damage + 1);
+
+                    attack = random.Next(minAttack, maxAttack); //15-20 damage (with crit: 25-35)
                     h -= attack;
                     if (h < 0) h = 0;
+
                     Console.WriteLine($"You used Fury Strike on the {n} for {attack} damage. Enemy health: {h}");
 
                     critChance = random.Next(0, 3); //1 in 3 chance
+
                     if (critChance == 0)
                     {
                         crit = 10;
                         h -= crit;
                         if (h < 0) h = 0;
+
                         Console.WriteLine($"You landed a critical hit for {crit} extra damage! Enemy health: {h}");
                     }
+
                     Console.WriteLine("You left the shadows.");
                     Invis = false;
 
                     break;
 
                 case false: //If not invis
-                    attack = random.Next(damage - 10, damage + 1); //10-20 damage (with crit: 20-30 damage)
+                    minAttack = (int)Math.Floor(damage - 10);
+                    maxAttack = (int)Math.Floor(damage + 1);
+
+                    attack = random.Next(minAttack, maxAttack); //10-20 damage (with crit: 20-30 damage)
                     h -= attack;
                     if (h < 0) h = 0;
+
                     Console.WriteLine($"You used Fury Strike on the {n} for {attack} damage. Enemy health: {h}");
 
                     critChance = random.Next(0, 3); //1 in 5 chance
+
                     if (critChance == 0)
                     {
                         crit = 10;
                         h -= crit;
                         if (h < 0) h = 0;
+
                         Console.WriteLine($"You landed a critical hit for {crit} extra damage! Enemy health: {h}");
                     }
 
@@ -289,22 +390,34 @@ namespace Jason
         //Backstab
         public int Backstab(int h, string n)
         {
+            int minAttack;
+            int maxAttack;
             int attack;
+
             switch (Invis)
             {
                 case true: //If invis
-                    attack = random.Next(damage - 5, damage + 16); //15-35 damage
+                    minAttack = (int)Math.Floor(damage - 5);
+                    maxAttack = (int)Math.Floor(damage + 16);
+
+                    attack = random.Next(minAttack, maxAttack); //15-35 damage
                     h -= attack;
                     if (h < 0) h = 0;
+
                     Console.WriteLine($"You used Back Stab on the {n} for {attack} damage. Enemy health: {h}");
                     Console.WriteLine("You left the shadows.");
+
                     Invis = false;
                     break;
 
                 case false: //If not invis
-                    attack = random.Next(damage - 15, damage); //5-20 damage
+                    minAttack = (int)Math.Floor(damage - 15);
+                    maxAttack = (int)Math.Floor(damage);
+
+                    attack = random.Next(minAttack, maxAttack); //5-20 damage
                     h -= attack;
                     if (h < 0) h = 0;
+
                     Console.WriteLine($"You used Back Stab on the {n} for {attack} damage. Enemy health: {h}");
                     break;
             }
@@ -320,6 +433,7 @@ namespace Jason
             if (hide == 0)
             {
                 InflictInvis();
+
                 Console.WriteLine("You hid in the shadows.");
                 shadowsUsage++;
                 Console.WriteLine("You shadows chance is now 1 in " + (2 + shadowsUsage) + ".");
