@@ -93,7 +93,7 @@ namespace Jason
                 Console.WriteLine("");
                 bool validChoice = false;
 
-                while (!validChoice)
+                while (!validChoice && player.stun == false) //While you make a valid choice and you aren't stunned, attack
                 {
                     switch (attackChoice)
                     {
@@ -129,28 +129,60 @@ namespace Jason
                     }
                 }
 
+                //Player stun
+                if (player.stun == true) //If the player is stunned
+                {
+                    Console.WriteLine("You are stunned and can't attack!");
+                    player.stun = false;
+                }
+
                 
-                //Bleed
-                if (Player.enemy.EnemyBleed == true && Player.enemy.enemyBleedTurn < 2 && h > 0) //If the enemy has bleed and it's less than 2 turns
+                //Enemy bleed
+                if (Player.enemy.enemyBleed == true && Player.enemy.enemyBleedTurn < 2 && h > 0) //If the enemy has bleed and it's less than 2 turns
                 {
                     h -= 5;
                     if (h < 0) h = 0;
                     Console.WriteLine($"The {n} bleeds 5 health. Enemy health: {h}");
                     Player.enemy.enemyBleedTurn++;
                 }
-
-                else if (Player.enemy.EnemyBleed == true && Player.enemy.enemyBleedTurn >= 2) //If the enemy has bleed and it has been 2 turns
+                else if (Player.enemy.enemyBleed == true && Player.enemy.enemyBleedTurn >= 2) //If the enemy has bleed and it has been 2 turns
                 {
-                    Player.enemy.EnemyBleed = false;
+                    Player.enemy.enemyBleed = false;
                     Player.enemy.enemyBleedTurn = 0;
+                }
+
+                //Enemy poison
+                if (Player.enemy.poison == true) //If the enemy is poisoned
+                {
+                    h -= 3;
+                    if (h < 0) h = 0;
+                    Console.WriteLine($"The {n} loses 3 health due to poison. Enemy health: {h}");
                 }
 
                 //Enemy attack
                 Player.enemy.EnemyAttack(player, n, p, h);
 
+                //Player bleed
+                if (player.bleed == true && player.bleedTurn < 2 && player.Health > 0) //If you are bleeding and it's less than 2 turns
+                {
+                    player.TakeBleedDamage(5);
+                    player.bleedTurn++;
+                }
 
-                //If you have a healing staff, heal
-                if (player.Weapon == "Healing Staff") player.Heal(weapons.HealingStaff(player));
+                else if (player.bleed == true && player.bleedTurn >= 2) //If you are bleeding and it has been 2 turns
+                {
+                    player.bleed = false;
+                    player.bleedTurn = 0;
+                }
+
+                //Healing Staff
+                if (player.Weapon == "Healing Staff" && player.Health > 0 && player.Class == "Mage") player.Heal(weapons.HealingStaff(player));
+
+                //Poison Dagger
+                if (player.Weapon == "Poison Dagger" && h > 0 && player.Health > 0 && player.Class == "Rogue") weapons.PoisonDagger();
+
+                //Flame Axe
+                if (player.Weapon == "Flame Axe" && h > 0 && player.Health > 0 && player.Class == "Warrior") weapons.FlameAxe(player);
             }
         }
 
