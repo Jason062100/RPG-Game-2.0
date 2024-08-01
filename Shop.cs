@@ -15,7 +15,15 @@ namespace Jason
             //Shop list
             Dictionary<string, int> store = new Dictionary<string, int>();
             store.Add("POTION", 10);
-            store.Add("EXAMPLE", 0);
+            store.Add("FLAME AXE", 10);
+            store.Add("HEALING STAFF", 10);
+            store.Add("POISON DAGGER", 10);
+
+            List<string> itemDescriptions = new List<string>();
+            itemDescriptions.Add("Potion: A potion flask that heals between 5 and 10 health.");
+            itemDescriptions.Add("Flame Axe: A great fiery axe that has a 1 in 3 chance to create an aura that increases your damage by 25%.");
+            itemDescriptions.Add("Healing Staff: A luminous staff for mages that has a 1 in 3 chance to heal you for 5 health.");
+            itemDescriptions.Add("Poison Dagger: A dagger coated in poison for rogues that has a 1 in 3 chance to poison an enemy. Poison stays until     enemy is killed.");
 
             Console.Clear();
             Console.WriteLine("You see a wandering trader on a donkey. Would you like to look at his wares? (y/n): ");
@@ -25,25 +33,39 @@ namespace Jason
             {
                 Console.WriteLine("");
                 Console.WriteLine("              SHOP");
-                Console.WriteLine("|==============================|");
+                Console.WriteLine("|================================|");
 
                 foreach (KeyValuePair<string, int> kvp in store)
                 {
                     Console.WriteLine($"Item: {kvp.Key} Cost: {kvp.Value} Gold");
                 }
-                Console.WriteLine("|==============================|");
+                Console.WriteLine("|================================|");
                 Console.WriteLine("");
 
                 Console.WriteLine($"Player gold: {player.gold}");
-                Console.Write("Would you like to purchase something? (y/n): ");
-                string input2 = Console.ReadLine().ToLower();
+                Console.WriteLine("");
+                Console.Write("Would you like to (1) purchase something or (2) see item descriptions? ");
+                int input2 = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("");
 
-                while (input2 == "y")
+                if (input2 == 2)
+                {
+                    for (int i = 0; i < itemDescriptions.Count; i++)
+                    {
+                        Console.WriteLine(itemDescriptions[i]);
+                        Console.WriteLine("");
+                    }
+                }
+
+                Console.Write("Would you like to (1) purchase something or (3) leave? ");
+                input2 = Convert.ToInt32(Console.ReadLine());
+
+                while (input2 == 1)
                 {
                     Console.Write("Which item would you like to buy? Type e if you want to exit. ");
                     string input3 = Console.ReadLine().ToUpper();
                     if (store.TryGetValue(input3, out int value)) { }
-                    else if (input3 == "E") input2 = "n";
+                    else if (input3 == "E") input2 = 3;
                     else Console.WriteLine("No such item.");
 
                     if (store.ContainsKey(input3) && player.gold >= value)
@@ -56,19 +78,37 @@ namespace Jason
                                 Console.WriteLine($"You spent {value} gold to buy 1 potion. You now have {player.potions} potions and {player.gold} gold.");
                                 break;
 
-                            case "EXAMPLE":
-                                Console.WriteLine("EXAMPLE Bought!");
+                            case "FLAME AXE":
+                                if (player.Weapon == "Flame Axe") break;
+                                player.Weapon = "Flame Axe";
+                                player.gold -= value;
+                                Console.WriteLine($"You spent {value} gold to buy a Flame Axe. You now have {player.gold} gold.");
+                                break;
+
+                            case "HEALING STAFF":
+                                if (player.Weapon == "Healing Staff") break;
+                                player.Weapon = "Healing Staff";
+                                player.gold -= value;
+                                Console.WriteLine($"You spent {value} gold to buy a Healing Staff. You now have {player.gold} gold.");
+                                break;
+
+                            case "POISON DAGGER":
+                                if (player.Weapon == "Poison Dagger") break;
+                                player.Weapon = "Poison Dagger";
+                                player.gold -= value;
+                                Console.WriteLine($"You spent {value} gold to buy a Poison Dagger. You now have {player.gold} gold.");
                                 break;
 
                             default:
+                                Console.WriteLine("Invalid input.");
                                 break;
                         }
 
-                        Console.Write("Would you like to buy something else? ");
-                        input2 = Console.ReadLine().ToLower();
+                        Console.Write("Would you like to buy something else? (1) Yes (2) No: ");
+                        input2 = Convert.ToInt32(Console.ReadLine());
                     }
 
-                    else if (store.ContainsKey(input3) && player.gold < value) Console.WriteLine("Not enough gold.");
+                    else if (store.ContainsKey(input3) && player.gold < value) Console.WriteLine("Seems like your gold pouch is empty.");
                 }
 
                 Console.WriteLine("\"Come again soon\", the trader says.");
