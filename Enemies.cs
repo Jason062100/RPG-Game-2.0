@@ -10,52 +10,57 @@ namespace Jason
     public class Enemies
     {
         static Random random = new Random();
-        static Loot loot = new Loot();
+        Loot loot = new Loot();
 
         //Status effects
         //Property to manage bleed status
-        public bool EnemyBleed { get; set; }
+        public bool enemyBleed { get; set; }
         public int enemyBleedTurn = 0;
-
-        public bool EnemyStun { get; set; }
+        public bool enemyStun { get; set; }
+        public bool poison { get; set; }
 
         //Method to inflict enemy bleed
         public void InflictBleed()
         {
-            EnemyBleed = true;
+            enemyBleed = true;
         }
 
         public void InflictStun()
         {
-            EnemyStun = true;
+            enemyStun = true;
+        }
+
+        public void InflictPoison()
+        {
+            poison = true;
         }
 
         //Enemy attack rewrite
         public void EnemyAttack(Player player, string n, int p, int h)
         {
-            //If the enemy is alive and isn't stunned and the player isn't invis
-            if (h > 0 && EnemyStun == false && player.Invis == false)
+            //If the enemy is alive, isn't stunned, and the player isn't invis
+            if (h > 0 && enemyStun == false && player.Invis == false)
             {
                 int enemyAttack = random.Next(0, p + 1);
                 int armor;
-                
+
                 //Checks class, uses armor for that class to negate damage
-                switch (player.Class) 
+                switch (player.Class)
                 {
                     case "Warrior":
-                        armor = random.Next(5, player.warriorArmor + 1);
+                        armor = random.Next(5, player.warriorArmor + 1); //5-10
                         enemyAttack -= armor;
                         Console.WriteLine($"{armor} damage from the enemy is negated by your armor.");
                         break;
 
                     case "Mage":
-                        armor = random.Next(5, player.mageArmor + 1);
+                        armor = random.Next(0, player.mageArmor + 1); //0-5
                         enemyAttack -= armor;
                         Console.WriteLine($"{armor} damage from the enemy is negated by your armor.");
                         break;
 
                     case "Rogue":
-                        armor = random.Next(5, player.rogueArmor + 1);
+                        armor = random.Next(0, player.rogueArmor + 1); //0-5
                         enemyAttack -= armor;
                         Console.WriteLine($"{armor} damage from the enemy is negated by your armor.");
                         break;
@@ -65,10 +70,10 @@ namespace Jason
             }
 
             //If the enemy is alive and stunned
-            else if (h > 0 && EnemyStun == true)
+            else if (h > 0 && enemyStun == true)
             {
                 Console.WriteLine("The enemy is stunned and cannot attack until next turn.");
-                EnemyStun = false;
+                enemyStun = false;
             }
 
             //If the player is invis, skip attack
@@ -95,10 +100,18 @@ namespace Jason
                 loot.XpDrop(player, n);
 
                 //Reset status effects
-                EnemyBleed = false;
+                enemyBleed = false;
                 enemyBleedTurn = 0;
-                EnemyStun = false;
+                enemyStun = false;
+                poison = false;
                 player.shadowsUsage = 0;
+
+                if (player.increaseDamage == true) player.IncreaseDamage(true);
+            }
+
+            if (h > 0 && enemyStun == false) //If the enemy is alive and isn't stunned, try to inflict status
+            {
+                player.InflictStatus();
             }
         }
     }
