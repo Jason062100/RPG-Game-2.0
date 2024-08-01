@@ -17,64 +17,21 @@ namespace Jason
         {
             while (playAgain == "y")
             {
-                Player player = new Player(100, 1, 0, 100); //100 health, level 1, starting xp, max health
-                
+                Player player = new Player(100, 1, 0, 100, 20); //100 health, level 1, starting xp, max health
+
 
                 //Starts game
                 Console.Title = "RPG Game";
                 Start(player);
 
+                DungeonOne(player);
 
-                //Dungeon 1
-                //Encounter 1
-                Encounters.Combat(player, "Zombie", 15, 30); //(Name, Power, Health)
+                ExitDungeon(player);
 
-                if (player.Health > 0)
-                {
-                    Console.WriteLine("You stumble upon a hatch. Maybe this could be the way out...");
-                    Console.WriteLine("Press any key to continue.");
-                    Console.ReadKey();
-                    Console.Clear();
-                }
-
-                //Encounter 2
-                if (player.Health > 0) Encounters.Combat(player, "Goblin", 20, 40);
-
-                if (player.Health > 0)
-                {
-                    Console.WriteLine("There is a lever on the wall. You decide to pull it and see a huge door that you thought was just a wall open.");
-                    Console.WriteLine("Press any key to continue.");
-                    Console.ReadKey();
-                    Console.Clear();
-                }
-
-                //Encounter 3
-                if (player.Health > 0) Encounters.Combat(player, "Skeleton Knight", 30, 60);
-
-                if (player.Health > 0)
-                {
-                    Console.WriteLine("Press any key to continue.");
-                    Console.ReadKey();
-                    Console.Clear();
-                    Console.WriteLine("After defeating the boss, you find the way out of the dungeon!");
-                    Console.WriteLine("Finally you see daylight again. Your eyes take a while to adjust.");
-                    Console.WriteLine("Press any key to continue.");
-                    Console.ReadKey();
-                    Console.Clear();
-                }
-
-                //Exit dungeon
-                player.BeatDungeon();
-                shop.UseShop(player);
-                //Encounters.ResetForDungeon();
-
-                //Dungeon 2   Troll, Golem, Griffin
-                Encounters.Combat(player, "Troll", 25, 60);          //TBD
-
+                DungeonTwo(player);
 
                 //Win
                 if (player.Health > 0) Console.WriteLine("You win. Congrats!");
-
 
                 //Lose
                 if (player.Health <= 0) Console.WriteLine($"You have been slain. Your adventure is over. GG.");
@@ -129,6 +86,65 @@ namespace Jason
             }
 
             Console.WriteLine("You have been trying to find your way out of this dungeon for a while now...");
+        }
+
+        public static void DungeonOne(Player player)
+        {
+            //Encounter 1
+            Encounters.Combat(player, "Zombie", 15, 30); //(Name, Power, Health)
+
+            if (player.Health > 0)
+            {
+                Console.WriteLine("You stumble upon a hatch. Maybe this could be the way out...");
+                Console.WriteLine("Press any key to continue.");
+                Console.ReadKey();
+                Console.Clear();
+            }
+
+            //Encounter 2
+            if (player.Health > 0) Encounters.Combat(player, "Goblin", 20, 40);
+
+            if (player.Health > 0)
+            {
+                Console.WriteLine("There is a lever on the wall. You decide to pull it and see a huge door that you thought was just a wall open.");
+                Console.WriteLine("Press any key to continue.");
+                Console.ReadKey();
+                Console.Clear();
+            }
+
+            //Encounter 3
+            if (player.Health > 0) Encounters.Combat(player, "Skeleton Knight", 30, 60);
+
+            if (player.Health > 0)
+            {
+                Console.WriteLine("Press any key to continue.");
+                Console.ReadKey();
+                Console.Clear();
+                Console.WriteLine("After defeating the boss, you find the way out of the dungeon!");
+                Console.WriteLine("Finally you see daylight again. Your eyes take a while to adjust.");
+                Console.WriteLine("Press any key to continue.");
+                Console.ReadKey();
+                Console.Clear();
+            }
+        }
+
+        public static void DungeonTwo(Player player)
+        {
+            //Dungeon 2: Troll, Golem, 
+            if (player.Health > 0) Encounters.Combat(player, "Troll", 30, 60);
+
+
+            if (player.Health > 0) Encounters.Combat(player, "Golem", 40, 70);
+        }
+
+        public static void ExitDungeon(Player player)
+        {
+            //Exit dungeon
+            if (player.Health > 0)
+            {
+                player.BeatDungeon();
+                shop.UseShop(player);
+            }
         }
     }
 }
