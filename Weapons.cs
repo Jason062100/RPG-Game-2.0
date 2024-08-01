@@ -13,8 +13,8 @@ namespace Jason
         public int HealingStaff(Player player)
         {
             int health = 0;
-
             int healChance = random.Next(0, 3); // 1 in 3 chance to heal
+
             if (healChance == 0) 
             {
                 health = 5;
@@ -22,6 +22,26 @@ namespace Jason
             }
 
             return health;
+        }
+
+        public void PoisonDagger()
+        {
+            int poisonChance = random.Next(0, 3); // 1 in 3 chance to poison
+            
+            if (poisonChance == 0)
+            {
+                Console.WriteLine("You inflicted poison on the enemy!");
+                Player.enemy.InflictPoison();
+            }
+        }
+
+        public void FlameAxe(Player player)
+        {
+            int flameChance = random.Next(0, 3); // 1 in 3 chance
+
+            if (flameChance == 0 && player.increaseDamage == false) player.IncreaseDamage(false);
+
+            else if (flameChance == 0 && player.increaseDamage == true) player.IncreaseDamage(true);
         }
     }
 }
