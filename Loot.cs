@@ -33,7 +33,7 @@ namespace Jason
         public void PotionDrop(Player player, string n)
         {
             int potions = 0;
-            int chance = random.Next(0, 4); //1 in 4 chance to get a potion
+            int chance = random.Next(0, 8); //1 in 8 chance to get a potion
             if (chance == 0)
             {
                 potions++;
@@ -48,13 +48,38 @@ namespace Jason
 
         public void WeaponDrop(Player player)
         {
+            int weaponDropChance;
+
+            //Flame Axe
+            if (player.Class == "Warrior" && player.Weapon != "Flame Axe")
+            {
+                weaponDropChance = random.Next(0, 5); //1 in 5 chance to get flame axe
+                if (weaponDropChance == 0)
+                {
+                    player.Weapon = "Flame Axe";
+                    Console.WriteLine("You found a Flame Axe! Stats: 1 in 3 chance to increase attack by 25%.");
+                }
+            }
+
+            //Healing Staff
             if (player.Class == "Mage" && player.Weapon != "Healing Staff")
             {
-                int weaponDropChance = random.Next(0, 5); // 1 in 5 chance to get healing staff
+                weaponDropChance = random.Next(0, 5); // 1 in 5 chance to get healing staff
                 if (weaponDropChance == 0)
                 {
                     player.Weapon = "Healing Staff";
                     Console.WriteLine("You found a Healing Staff! Stats: 1 in 5 chance to heal 5 health after each turn.");
+                }
+            }
+
+            //Poison Dagger
+            if (player.Class == "Rogue" && player.Weapon != "Poison Dagger")
+            {
+                weaponDropChance = random.Next(0, 5); //1 in 5 chance to get poison dagger
+                if (weaponDropChance == 0)
+                {
+                    player.Weapon = "Poison Dagger";
+                    Console.WriteLine("You found a Poison Dagger! Stats: 1 in 5 chance to poison the enemy. 3 damage every turn and it doesn't go away until   the enemy is dead.");
                 }
             }
         }
