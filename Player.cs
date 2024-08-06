@@ -34,6 +34,7 @@ namespace Jason
         public int bleedTurn = 0;
         public bool stun { get; set; }
         public bool Invis { get; set; }
+        public bool ShadowStep { get; set; }
 
         public bool increaseDamage { get; set; }
 
@@ -69,7 +70,6 @@ namespace Jason
             stun = true;
             Console.WriteLine("The enemy has inflicted stun on you!");
         }
-
         //Method to inflict invis
         public void InflictInvis()
         {
@@ -251,8 +251,8 @@ namespace Jason
         public List<string> MageAttackDetails = new List<string>();
         public List<string> MageAttackDetailsList()
         {
-            MageAttackDetails.Add("Fireball does 15-30 damage. Has a 1 in 3 chance of missing.");
-            MageAttackDetails.Add("Does 1-3 damage per hit. Can hit 2-8 times.");
+            MageAttackDetails.Add("Fireball does 15-30 damage. Has a 1 in 3 chance of missing. 20-30 damage.");
+            MageAttackDetails.Add("Magic Missle does 1-4 damage per hit. Can hit 2-8 times. 4-36 damage.");
             return MageAttackDetails;
         }
 
@@ -283,12 +283,12 @@ namespace Jason
         //Magic Missile
         public int MagicMissle(int h, string n)
         {
-            int minAttack = (int)Math.Floor(damage - 19);
-            int maxAttack = (int)Math.Floor(damage - 15);
+            int minAttack = (int)Math.Floor(damage - 18);
+            int maxAttack = (int)Math.Floor(damage - 16);
 
-            int attack = random.Next(minAttack, maxAttack); //1-3 dmg per hit
+            int attack = random.Next(minAttack, maxAttack); //2-4 dmg per hit
             int hits = random.Next(2, 9); //Can hit 2-8 times
-            attack *= hits;
+            attack *= hits; //4-36 damage
 
             h -= attack;
             if (h < 0) h = 0;
@@ -318,7 +318,7 @@ namespace Jason
         public List<string> RogueAttackDetailsList()
         {
             RogueAttackDetails.Add("1. Fury Strike does 10-20 damage and has a 1 in 5 chance of a critical hit for 10 extra damage. If you are invisible, it does 15-20 damage and a 1 in 3 chance for a critical hit..");
-            RogueAttackDetails.Add("2. Back Stab does 5-20 damage or 15-35 damage if you are invisible.");
+            RogueAttackDetails.Add("2. Back Stab does 5-20 damage. Has a chance to shadow step and evade incoming damage.");
             RogueAttackDetails.Add("3. Shadows has a 1 in 2 chance to hide in the shadows. Each time you successfully hide, the chance goes up by 1. Resets after killing an enemy.");
             return RogueAttackDetails;
         }
@@ -335,10 +335,10 @@ namespace Jason
             switch (Invis)
             {
                 case true: //If invis
-                    minAttack = (int)Math.Floor(damage - 5);
-                    maxAttack = (int)Math.Floor(damage + 1);
+                    minAttack = (int)Math.Floor(damage + 1);
+                    maxAttack = (int)Math.Floor(damage + 11);
 
-                    attack = random.Next(minAttack, maxAttack); //15-20 damage (with crit: 25-35)
+                    attack = random.Next(minAttack, maxAttack); //20-30 damage (with crit: 30-40)
                     h -= attack;
                     if (h < 0) h = 0;
 
@@ -361,16 +361,16 @@ namespace Jason
                     break;
 
                 case false: //If not invis
-                    minAttack = (int)Math.Floor(damage - 10);
-                    maxAttack = (int)Math.Floor(damage + 1);
+                    minAttack = (int)Math.Floor(damage - 15);
+                    maxAttack = (int)Math.Floor(damage - 4);
 
-                    attack = random.Next(minAttack, maxAttack); //10-20 damage (with crit: 20-30 damage)
+                    attack = random.Next(minAttack, maxAttack); //5-15 damage (with crit: 15-25 damage)
                     h -= attack;
                     if (h < 0) h = 0;
 
                     Console.WriteLine($"You used Fury Strike on the {n} for {attack} damage. Enemy health: {h}");
 
-                    critChance = random.Next(0, 3); //1 in 5 chance
+                    critChance = random.Next(0, 5); //1 in 5 chance
 
                     if (critChance == 0)
                     {
@@ -390,37 +390,23 @@ namespace Jason
         //Backstab
         public int Backstab(int h, string n)
         {
-            int minAttack;
-            int maxAttack;
-            int attack;
+            int minAttack = (int)Math.Floor(damage - 9);
+            int maxAttack = (int)Math.Floor(damage + 1);
 
-            switch (Invis)
+            int attack = random.Next(minAttack, maxAttack); //10-20 damage
+            h -= attack;
+            if (h < 0) h = 0;
+
+            Console.WriteLine($"You used Back Stab on the {n} for {attack} damage. Enemy health: {h}");
+
+            if (Invis == true)
             {
-                case true: //If invis
-                    minAttack = (int)Math.Floor(damage - 5);
-                    maxAttack = (int)Math.Floor(damage + 16);
-
-                    attack = random.Next(minAttack, maxAttack); //15-35 damage
-                    h -= attack;
-                    if (h < 0) h = 0;
-
-                    Console.WriteLine($"You used Back Stab on the {n} for {attack} damage. Enemy health: {h}");
-                    Console.WriteLine("You left the shadows.");
-
-                    Invis = false;
-                    break;
-
-                case false: //If not invis
-                    minAttack = (int)Math.Floor(damage - 15);
-                    maxAttack = (int)Math.Floor(damage);
-
-                    attack = random.Next(minAttack, maxAttack); //5-20 damage
-                    h -= attack;
-                    if (h < 0) h = 0;
-
-                    Console.WriteLine($"You used Back Stab on the {n} for {attack} damage. Enemy health: {h}");
-                    break;
+                Console.WriteLine("You left the shadows.");
+                Invis = false;
             }
+
+            int shadowStepChance = random.Next(0, 3); //1 in 3 chance to evade next attack
+            if (shadowStepChance == 0) ShadowStep = true;
 
             return h;
         }
@@ -434,9 +420,8 @@ namespace Jason
             {
                 InflictInvis();
 
-                Console.WriteLine("You hid in the shadows.");
                 shadowsUsage++;
-                Console.WriteLine("You shadows chance is now 1 in " + (2 + shadowsUsage) + ".");
+                Console.WriteLine("You hid in the shadows. Your shadows chance is now 1 in " + (2 + shadowsUsage) + ".");
             }
 
             else Console.WriteLine("You failed to hide.");
