@@ -39,7 +39,7 @@ namespace Jason
         public void EnemyAttack(Player player, string n, int p, int h)
         {
             //If the enemy is alive, isn't stunned, and the player isn't invis
-            if (h > 0 && enemyStun == false && player.Invis == false)
+            if (h > 0 && enemyStun == false && player.Invis == false && player.ShadowStep == false)
             {
                 int enemyAttack = random.Next(0, p + 1);
                 int armor;
@@ -82,6 +82,13 @@ namespace Jason
                 Console.WriteLine("The enemy doesn't know where you are.");
             }
 
+            //If the player shadow stepped, skip attack
+            else if (h > 0 && player.ShadowStep == true)
+            {
+                Console.WriteLine("You shadow stepped and avoided the enemies attack!");
+                player.ShadowStep = false;
+            }
+
             //If the enemy is dead
             else if (h <= 0)
             {
@@ -105,6 +112,7 @@ namespace Jason
                 enemyStun = false;
                 poison = false;
                 player.shadowsUsage = 0;
+                player.ShadowStep = false;
 
                 if (player.increaseDamage == true) player.IncreaseDamage(true);
             }
