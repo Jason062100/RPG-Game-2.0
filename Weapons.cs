@@ -28,7 +28,7 @@ namespace Jason
         {
             int poisonChance = random.Next(0, 3); // 1 in 3 chance to poison
             
-            if (poisonChance == 0)
+            if (poisonChance == 0 && Player.enemy.poison == false) //If the enemy isn't already poisoned
             {
                 Console.WriteLine("You inflicted poison on the enemy!");
                 Player.enemy.InflictPoison();
