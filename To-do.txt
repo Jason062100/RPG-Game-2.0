@@ -21,8 +21,9 @@ DONE add warrior Flame Axe
 
 --TO-DO--
 Make level up do more
-add stuff to shop
+add stuff to shop (Gold Ring that increases gold drop)
 add a way to make the story/dungeons different each time
+make poison not able to inflict if you use shadows
 
 
-make game harder
+scale game
