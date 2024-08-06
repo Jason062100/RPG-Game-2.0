@@ -44,9 +44,14 @@ namespace Jason
 
         static void Start(Player player)
         {
+            List<string> classDetails = new List<string>();
+            classDetails.Add("Warrior: Armor: Medium | Damage: Medium | Abilities: Bleed, stun");
+            classDetails.Add("Mage: Armor: Low | Damage: High | Abilities: Massive damage with miss chance, multiple hits possible");
+            classDetails.Add("Rogue: Armor: Low | Damage: Medium | Abilities: Critical hit chance, evasion, invisibility");
+
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Welcome to RPG Game. Which class would you like to play as? ");
+            Console.WriteLine("Welcome to RPG Game. Which class would you like to play as? Type 0 for class details.");
             Console.WriteLine("1. Warrior  2. Mage  3. Rogue");
 
             int input = Convert.ToInt32(Console.ReadLine());
@@ -76,6 +81,17 @@ namespace Jason
                         Console.WriteLine("You have chosen a Rogue.");
                         player.ChooseClass("Rogue");
                         x = false;
+                        break;
+
+                    case 0:
+                        for (int i = 0; i < classDetails.Count; i++)
+                        {
+                            Console.WriteLine("");
+                            Console.WriteLine(classDetails[i]);
+                        }
+                        Console.WriteLine("");
+                        Console.WriteLine("Which class would you like to play as?");
+                        input = Convert.ToInt32(Console.ReadLine());
                         break;
 
                     default:
