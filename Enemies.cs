@@ -103,6 +103,9 @@ namespace Jason
                 //Weapon Drop
                 loot.WeaponDrop(player);
 
+                //Item Drop
+                loot.ItemDrop(player);
+
                 //Xp Drop
                 loot.XpDrop(player, n);
 
