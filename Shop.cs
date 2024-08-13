@@ -18,12 +18,14 @@ namespace Jason
             store.Add("FLAME AXE", 10);
             store.Add("HEALING STAFF", 10);
             store.Add("POISON DAGGER", 10);
+            store.Add("GOLDEN RING", 10);
 
             List<string> itemDescriptions = new List<string>();
             itemDescriptions.Add("Potion: A potion flask that heals between 5 and 10 health.");
             itemDescriptions.Add("Flame Axe: A great fiery axe that has a 1 in 3 chance to create an aura that increases your damage by 25%.");
             itemDescriptions.Add("Healing Staff: A luminous staff for mages that has a 1 in 3 chance to heal you for 5 health.");
             itemDescriptions.Add("Poison Dagger: A dagger coated in poison for rogues that has a 1 in 3 chance to poison an enemy. Poison stays until     enemy is killed.");
+            itemDescriptions.Add("Golden Ring: A ring shining in gold that attracts 2x as much gold to the player.");
 
             Console.Clear();
             Console.WriteLine("You see a wandering trader on a donkey. Would you like to look at his wares? (y/n): ");
@@ -79,25 +81,75 @@ namespace Jason
                                 break;
 
                             case "FLAME AXE":
-                                if (player.Weapon == "Flame Axe") break;
-                                player.Weapon = "Flame Axe";
-                                player.gold -= value;
-                                Console.WriteLine($"You spent {value} gold to buy a Flame Axe. You now have {player.gold} gold.");
-                                break;
+                                if (player.Weapon != "Flame Axe")
+                                {
+                                    player.Weapon = "Flame Axe";
+                                    player.gold -= value;
+                                    Console.WriteLine($"You spent {value} gold to buy a Flame Axe. You now have {player.gold} gold.");
+                                    break;
+                                }
+                                else if (player.Weapon == "Flame Axe")
+                                {
+                                    Console.WriteLine("You already have a Flame Axe!");
+                                    break;
+                                }
+                                else if (player.Class != "Warrior")
+                                {
+                                    Console.WriteLine("You have to be a Warrior to buy this!");
+                                    break;
+                                }
 
                             case "HEALING STAFF":
-                                if (player.Weapon == "Healing Staff") break;
-                                player.Weapon = "Healing Staff";
-                                player.gold -= value;
-                                Console.WriteLine($"You spent {value} gold to buy a Healing Staff. You now have {player.gold} gold.");
-                                break;
+                                if (player.Weapon != "Healing Staff")
+                                {
+                                    player.Weapon = "Healing Staff";
+                                    player.gold -= value;
+                                    Console.WriteLine($"You spent {value} gold to buy a Healing Staff. You now have {player.gold} gold.");
+                                    break;
+                                }
+                                else if (player.Weapon == "Healing Staff")
+                                {
+                                    Console.WriteLine("You already have a Healing Staff!");
+                                    break;
+                                }
+                                else if (player.Class != "Mage")
+                                {
+                                    Console.WriteLine("You have to be a Mage to buy this!");
+                                    break;
+                                }
 
                             case "POISON DAGGER":
-                                if (player.Weapon == "Poison Dagger") break;
-                                player.Weapon = "Poison Dagger";
-                                player.gold -= value;
-                                Console.WriteLine($"You spent {value} gold to buy a Poison Dagger. You now have {player.gold} gold.");
-                                break;
+                                if (player.Weapon != "Poison Dagger")
+                                {
+                                    player.Weapon = "Poison Dagger";
+                                    player.gold -= value;
+                                    Console.WriteLine($"You spent {value} gold to buy a Poison Dagger. You now have {player.gold} gold.");
+                                    break;
+                                }
+                                else if (player.Weapon == "Poison Dagger")
+                                {
+                                    Console.WriteLine("You already have a Poison Dagger!");
+                                    break;
+                                }
+                                else if (player.Class != "Rogue")
+                                {
+                                    Console.WriteLine("You have to be a Rogue to buy this!");
+                                    break;
+                                }
+
+                            case "GOLDEN RING":
+                                if (player.item != "Golden Ring")
+                                {
+                                    player.item = "Golden Ring";
+                                    player.gold -= value;
+                                    Console.WriteLine($"You spent {value} gold to buy a Golden Ring. You now have {player.gold} gold.");
+                                    break;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("You already have a Golden Ring!");
+                                    break;
+                                }
 
                             default:
                                 Console.WriteLine("Invalid input.");
