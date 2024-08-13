@@ -90,7 +90,7 @@ namespace Jason
             int goldenRingDropChance;
             if (player.item != "Golden Ring")
             {
-                goldenRingDropChance = random.Next(0, 1);
+                goldenRingDropChance = random.Next(0, 5); //1 in 5 drop chance
 
                 if (goldenRingDropChance == 0)
                 {
