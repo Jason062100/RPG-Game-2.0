@@ -18,10 +18,12 @@ namespace Jason
 
         //Player stats
         public string Weapon { get; set; }
+        public string item { get; set; }
         public double damage { get; set; }
         public int potions = 3;
         public int potionStrength = 11;
         public int gold = 0;
+        public int goldMultiplier = 1;
         public int xp = 0;
 
         //Armor
