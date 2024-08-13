@@ -17,7 +17,7 @@ namespace Jason
         {
             while (playAgain == "y")
             {
-                Player player = new Player(100, 1, 0, 100, 20); //100 health, level 1, starting xp, max health
+                Player player = new Player(100, 1, 0, 100, 20); //100 health, level 1, starting xp, max health, damage
 
 
                 //Starts game
