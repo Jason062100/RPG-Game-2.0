@@ -18,10 +18,11 @@ DONE create status effects for enemies to apply on you
 DONE add Rogue Poison Dagger
 DONE Make weapons available to buy in shop
 DONE add warrior Flame Axe
+DONE Add Item (Golden Ring)
+DONE Add Item (Golden Ring) to shop
 
 --TO-DO--
 Make level up do more
-add stuff to shop (Gold Ring that increases gold drop)
 add a way to make the story/dungeons different each time
 make poison not able to inflict if you use shadows
 
