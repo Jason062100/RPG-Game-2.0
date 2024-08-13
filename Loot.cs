@@ -20,12 +20,11 @@ namespace Jason
             if (chance == 0)
             {
                 gold += random.Next(1, 10);
-            }
 
-            if (gold != 0)
-            {
-                player.gold += gold;
-                Console.WriteLine($"The {n} dropped {gold} gold. Player gold: {player.gold}");
+                player.gold += gold * player.goldMultiplier;
+
+                if (player.item == "Golden Ring") Console.WriteLine($"The {n} dropped {gold} gold. Your Golden Ring doubled it to {gold * player.goldMultiplier} gold! Player gold: {player.gold}");
+                else Console.WriteLine($"The {n} dropped {gold} gold. Player gold: {player.gold}");
             }
         }
 
@@ -80,6 +79,24 @@ namespace Jason
                 {
                     player.Weapon = "Poison Dagger";
                     Console.WriteLine("You found a Poison Dagger! Stats: 1 in 5 chance to poison the enemy. 3 damage every turn and it doesn't go away until   the enemy is dead.");
+                }
+            }
+        }
+
+        public void ItemDrop(Player player)
+        {
+
+            //Golden Ring Drop
+            int goldenRingDropChance;
+            if (player.item != "Golden Ring")
+            {
+                goldenRingDropChance = random.Next(0, 1);
+
+                if (goldenRingDropChance == 0)
+                {
+                    player.item = "Golden Ring";
+                    player.goldMultiplier = 2;
+                    Console.WriteLine($"You found a Golden Ring! Your gold multiplier is now {player.goldMultiplier}");
                 }
             }
         }
