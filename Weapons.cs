@@ -39,9 +39,9 @@ namespace Jason
         {
             int flameChance = random.Next(0, 3); // 1 in 3 chance
 
-            if (flameChance == 0 && player.increaseDamage == false) player.IncreaseDamage(false);
+            if (flameChance == 0 && player.increaseDamage == false && player.stun == false) player.IncreaseDamage(false);
 
-            else if (flameChance == 0 && player.increaseDamage == true) player.IncreaseDamage(true);
+            else if (player.increaseDamage == true) player.IncreaseDamage(true);
         }
     }
 }
