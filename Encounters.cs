@@ -149,10 +149,11 @@ namespace Jason
                 {
                     Player.enemy.enemyBleed = false;
                     Player.enemy.enemyBleedTurn = 0;
+                    Console.WriteLine("The enemy stopped bleeding.");
                 }
 
                 //Enemy poison
-                if (Player.enemy.poison == true) //If the enemy is poisoned
+                if (Player.enemy.poison == true && h > 0) //If the enemy is poisoned and alive
                 {
                     h -= 3;
                     if (h < 0) h = 0;
@@ -173,13 +174,14 @@ namespace Jason
                 {
                     player.bleed = false;
                     player.bleedTurn = 0;
+                    Console.WriteLine("You stopped bleeding.");
                 }
 
                 //Healing Staff
                 if (player.Weapon == "Healing Staff" && player.Health > 0 && player.Class == "Mage") player.Heal(weapons.HealingStaff(player));
 
                 //Poison Dagger
-                if (player.Weapon == "Poison Dagger" && h > 0 && player.Health > 0 && player.Class == "Rogue") weapons.PoisonDagger();
+                if (player.Weapon == "Poison Dagger" && h > 0 && player.Health > 0 && player.Class == "Rogue" && player.Invis == false) weapons.PoisonDagger();
 
                 //Flame Axe
                 if (player.Weapon == "Flame Axe" && h > 0 && player.Health > 0 && player.Class == "Warrior") weapons.FlameAxe(player);
