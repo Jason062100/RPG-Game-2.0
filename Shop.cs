@@ -14,7 +14,7 @@ namespace Jason
         {
             //Shop list
             Dictionary<string, int> store = new Dictionary<string, int>();
-            store.Add("POTION", 10);
+            store.Add("POTION", 5);
             store.Add("FLAME AXE", 10);
             store.Add("HEALING STAFF", 10);
             store.Add("POISON DAGGER", 10);
@@ -57,10 +57,8 @@ namespace Jason
                         Console.WriteLine(itemDescriptions[i]);
                         Console.WriteLine("");
                     }
+                    input2 = 1;
                 }
-
-                Console.Write("Would you like to (1) purchase something or (3) leave? ");
-                input2 = Convert.ToInt32(Console.ReadLine());
 
                 while (input2 == 1)
                 {
@@ -81,66 +79,61 @@ namespace Jason
                                 break;
 
                             case "FLAME AXE":
-                                if (player.Weapon != "Flame Axe")
+                                if (player.Class != "Warrior")
+                                {
+                                    Console.WriteLine("You have to be a Warrior to buy this!");
+                                }
+
+                                else if (player.Weapon == "Flame Axe")
+                                {
+                                    Console.WriteLine("You already have a Flame Axe!");
+                                }
+
+                                else
                                 {
                                     player.Weapon = "Flame Axe";
                                     player.gold -= value;
                                     Console.WriteLine($"You spent {value} gold to buy a Flame Axe. You now have {player.gold} gold.");
-                                    break;
                                 }
-                                else if (player.Weapon == "Flame Axe")
-                                {
-                                    Console.WriteLine("You already have a Flame Axe!");
-                                    break;
-                                }
-                                else if (player.Class != "Warrior")
-                                {
-                                    Console.WriteLine("You have to be a Warrior to buy this!");
-                                    break;
-                                }
+                                break;
 
                             case "HEALING STAFF":
-                                if (player.Weapon != "Healing Staff")
+                                if (player.Class != "Mage") Console.WriteLine("You have to be a Mage to buy this!");
+
+                                else if (player.Weapon == "Healing Staff") Console.WriteLine("You already have a Healing Staff!");
+
+                                else
                                 {
                                     player.Weapon = "Healing Staff";
                                     player.gold -= value;
                                     Console.WriteLine($"You spent {value} gold to buy a Healing Staff. You now have {player.gold} gold.");
-                                    break;
                                 }
-                                else if (player.Weapon == "Healing Staff")
-                                {
-                                    Console.WriteLine("You already have a Healing Staff!");
-                                    break;
-                                }
-                                else if (player.Class != "Mage")
-                                {
-                                    Console.WriteLine("You have to be a Mage to buy this!");
-                                    break;
-                                }
+                                break;
 
                             case "POISON DAGGER":
-                                if (player.Weapon != "Poison Dagger")
+                                if (player.Class != "Rogue")
+                                {
+                                    Console.WriteLine("You have to be a Rogue to buy this!");
+                                }
+
+                                else if (player.Weapon == "Poison Dagger")
+                                {
+                                    Console.WriteLine("You already have a Poison Dagger!");
+                                }
+
+                                else
                                 {
                                     player.Weapon = "Poison Dagger";
                                     player.gold -= value;
                                     Console.WriteLine($"You spent {value} gold to buy a Poison Dagger. You now have {player.gold} gold.");
-                                    break;
                                 }
-                                else if (player.Weapon == "Poison Dagger")
-                                {
-                                    Console.WriteLine("You already have a Poison Dagger!");
-                                    break;
-                                }
-                                else if (player.Class != "Rogue")
-                                {
-                                    Console.WriteLine("You have to be a Rogue to buy this!");
-                                    break;
-                                }
+                                break;
 
                             case "GOLDEN RING":
                                 if (player.item != "Golden Ring")
                                 {
                                     player.item = "Golden Ring";
+                                    player.goldMultiplier = 2;
                                     player.gold -= value;
                                     Console.WriteLine($"You spent {value} gold to buy a Golden Ring. You now have {player.gold} gold.");
                                     break;
