@@ -36,6 +36,7 @@ namespace Jason
         public int bleedTurn = 0;
         public bool stun { get; set; }
         public bool Invis { get; set; }
+        public int shadowsTurn = 0;
         public bool ShadowStep { get; set; }
 
         public bool increaseDamage { get; set; }
@@ -83,13 +84,13 @@ namespace Jason
         {
             if (bleed == false && Invis == false) //If the player isn't bleeding already and the player isn't invis
             {
-                int playerBleedChance = random.Next(0, 8); //1 in 8 change to bleed
+                int playerBleedChance = random.Next(0, 10); //1 in 8 change to bleed
                 if (playerBleedChance == 0) InflictBleed();
             }
 
             if (stun == false && Invis == false) //If the player isn't stunned already and the player isn't invis
             {
-                int playerStunChance = random.Next(0, 8); //1 in 8 chance to be stunned
+                int playerStunChance = random.Next(0, 10); //1 in 8 chance to be stunned
                 if (playerStunChance == 0) InflictStun();
             }
         }
@@ -193,8 +194,8 @@ namespace Jason
         //Warrior Stab
         public int Stab(int h, string n)
         {
-            int minAttack = (int)Math.Floor(damage - 15);
-            int maxAttack = (int)Math.Floor(damage - 4);
+            int minAttack = (int)Math.Floor(damage - 9);
+            int maxAttack = (int)Math.Floor(damage);
 
             int attack = random.Next(minAttack, maxAttack); //5-15 dmg
             h -= attack;
@@ -321,7 +322,7 @@ namespace Jason
         {
             RogueAttackDetails.Add("1. Fury Strike does 10-20 damage and has a 1 in 5 chance of a critical hit for 10 extra damage. If you are invisible, it does 15-20 damage and a 1 in 3 chance for a critical hit..");
             RogueAttackDetails.Add("2. Back Stab does 5-20 damage. Has a chance to shadow step and evade incoming damage.");
-            RogueAttackDetails.Add("3. Shadows has a 1 in 2 chance to hide in the shadows. Each time you successfully hide, the chance goes up by 1. Resets after killing an enemy.");
+            RogueAttackDetails.Add("3. Shadows has a 1 in 3 chance to hide in the shadows. Each time you successfully hide, the chance goes up by 1. Resets after killing an enemy.");
             return RogueAttackDetails;
         }
 
@@ -337,10 +338,10 @@ namespace Jason
             switch (Invis)
             {
                 case true: //If invis
-                    minAttack = (int)Math.Floor(damage + 1);
-                    maxAttack = (int)Math.Floor(damage + 11);
+                    minAttack = (int)Math.Floor(damage - 9);
+                    maxAttack = (int)Math.Floor(damage + 1);
 
-                    attack = random.Next(minAttack, maxAttack); //20-30 damage (with crit: 30-40)
+                    attack = random.Next(minAttack, maxAttack); //10-20 damage (with crit: 20-30)
                     h -= attack;
                     if (h < 0) h = 0;
 
@@ -357,8 +358,13 @@ namespace Jason
                         Console.WriteLine($"You landed a critical hit for {crit} extra damage! Enemy health: {h}");
                     }
 
-                    Console.WriteLine("You left the shadows.");
-                    Invis = false;
+                    if (shadowsTurn == 1)
+                    {
+                        Console.WriteLine("You left the shadows.");
+                        Invis = false;
+                    }
+
+                    shadowsTurn++;
 
                     break;
 
@@ -401,7 +407,7 @@ namespace Jason
 
             Console.WriteLine($"You used Back Stab on the {n} for {attack} damage. Enemy health: {h}");
 
-            if (Invis == true)
+            if (Invis == true && shadowsTurn == 1)
             {
                 Console.WriteLine("You left the shadows.");
                 Invis = false;
@@ -410,13 +416,15 @@ namespace Jason
             int shadowStepChance = random.Next(0, 3); //1 in 3 chance to evade next attack
             if (shadowStepChance == 0) ShadowStep = true;
 
+            shadowsTurn++;
+
             return h;
         }
 
         public int shadowsUsage = 0;
         public void Shadows()
         {
-            int hide = random.Next(0, 2 + shadowsUsage); //1 in 2 chance + 1 every time you use it
+            int hide = random.Next(0, 3 + shadowsUsage); //1 in 2 chance + 1 every time you use it
 
             if (hide == 0)
             {
