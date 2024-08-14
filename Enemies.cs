@@ -69,6 +69,11 @@ namespace Jason
                 player.TakeDamage(enemyAttack);
             }
 
+            if (h > 0 && enemyStun == false) //If the enemy is alive and isn't stunned, try to inflict status
+            {
+                player.InflictStatus();
+            }
+
             //If the enemy is alive and stunned
             else if (h > 0 && enemyStun == true)
             {
@@ -83,7 +88,7 @@ namespace Jason
             }
 
             //If the player shadow stepped, skip attack
-            else if (h > 0 && player.ShadowStep == true)
+            if (h > 0 && player.ShadowStep == true)
             {
                 Console.WriteLine("You shadow stepped and avoided the enemies attack!");
                 player.ShadowStep = false;
@@ -116,13 +121,10 @@ namespace Jason
                 poison = false;
                 player.shadowsUsage = 0;
                 player.ShadowStep = false;
+                player.Invis = false;
+                player.shadowsTurn = 0;
 
                 if (player.increaseDamage == true) player.IncreaseDamage(true);
-            }
-
-            if (h > 0 && enemyStun == false) //If the enemy is alive and isn't stunned, try to inflict status
-            {
-                player.InflictStatus();
             }
         }
     }
