@@ -20,11 +20,15 @@ DONE Make weapons available to buy in shop
 DONE add warrior Flame Axe
 DONE Add Item (Golden Ring)
 DONE Add Item (Golden Ring) to shop
+DONE Make monsters different each time
+DONE make poison not able to inflict if you use shadows
+DONE make shadows last one more turn
 
 --TO-DO--
-Make level up do more
-add a way to make the story/dungeons different each time
-make poison not able to inflict if you use shadows
+Fix all variable and properties capitalization
+Make level up do more (add more armor)
+Make level up cost more exp each time you level, make monsters drop more xp per level
+Make heal staff heal for random amount??
 
 
 scale game
