@@ -10,6 +10,7 @@ namespace Jason
     public class Program
     {
         public static Shop shop = new Shop();
+        public static Random random = new Random();
 
         public static string playAgain = "y";
 
@@ -107,8 +108,7 @@ namespace Jason
         public static void DungeonOne(Player player)
         {
             //Encounter 1
-            Encounters.Combat(player, "Zombie", 15, 30); //(Name, Power, Health)
-
+            Encounters.Combat(player, ChooseMonster(), 15, 30); //(Name, Power, Health)
             if (player.Health > 0)
             {
                 Console.WriteLine("You stumble upon a hatch. Maybe this could be the way out...");
@@ -118,8 +118,7 @@ namespace Jason
             }
 
             //Encounter 2
-            if (player.Health > 0) Encounters.Combat(player, "Goblin", 20, 40);
-
+            if (player.Health > 0) Encounters.Combat(player, ChooseMonster(), 20, 40);
             if (player.Health > 0)
             {
                 Console.WriteLine("There is a lever on the wall. You decide to pull it and see a huge door that you thought was just a wall open.");
@@ -130,7 +129,6 @@ namespace Jason
 
             //Encounter 3
             if (player.Health > 0) Encounters.Combat(player, "Skeleton Knight", 30, 60);
-
             if (player.Health > 0)
             {
                 Console.WriteLine("Press any key to continue.");
@@ -146,11 +144,58 @@ namespace Jason
 
         public static void DungeonTwo(Player player)
         {
-            //Dungeon 2: Troll, Golem, 
-            if (player.Health > 0) Encounters.Combat(player, "Troll", 30, 60);
+            if (player.Health > 0) Encounters.Combat(player, ChooseMonster(), 30, 60);
+            if (player.Health > 0)
+            {
+                Console.WriteLine("You weren't watching where you were going and fell into a pit! It's really dark.");
+                Console.WriteLine("Press any key to continue.");
+                Console.ReadKey();
+                Console.Clear();
+            }
+
+            if (player.Health > 0) Encounters.Combat(player, ChooseMonster(), 40, 70);
+            if (player.Health > 0)
+            {
+                Console.WriteLine("You see a massive door and decide to enter. Up ahead you can barely make out a figure. It's too big to be a monster, it must be something else.");
+                Console.WriteLine("Press any key to continue.");
+                Console.ReadKey();
+                Console.Clear();
+            }
+
+            if (player.Health > 0) Encounters.Combat(player, "Dragon", 50, 80);
+        }
 
 
-            if (player.Health > 0) Encounters.Combat(player, "Golem", 40, 70);
+        //Monsters
+        public static Dictionary<string, int> monsters = new Dictionary<string, int>
+            {
+                { "Troll", 0 },
+                { "Golem", 0 },
+                { "Goblin", 0},
+                { "Zombie", 0 }
+            };
+
+        public static string ChooseMonster()
+        {
+            string[] chooseMonster = new string[] { "Troll", "Golem", "Goblin", "Zombie" };
+            string chosenMonster = chooseMonster[random.Next(0, 4)];
+            string monster = "Bird";
+
+            while (monsters[chosenMonster] == 1)
+            {
+                chosenMonster = chooseMonster[random.Next(0, 4)];
+            }
+
+            if (monsters.ContainsKey(chosenMonster))
+            {
+                if (monsters[chosenMonster] == 0) //If the monster hasn't been chosen before
+                {
+                    monster = chosenMonster;
+                    monsters[chosenMonster] = 1;
+                }
+            }
+
+            return monster;
         }
 
         public static void ExitDungeon(Player player)
