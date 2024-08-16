@@ -23,7 +23,7 @@ namespace Jason
 
                 player.gold += gold * player.goldMultiplier;
 
-                if (player.item == "Golden Ring") Console.WriteLine($"The {n} dropped {gold} gold. Your Golden Ring doubled it to {gold * player.goldMultiplier} gold! Player gold: {player.gold}");
+                if (player.Item == "Golden Ring") Console.WriteLine($"The {n} dropped {gold} gold. Your Golden Ring doubled it to {gold * player.goldMultiplier} gold! Player gold: {player.gold}");
                 else Console.WriteLine($"The {n} dropped {gold} gold. Player gold: {player.gold}");
             }
         }
@@ -88,13 +88,13 @@ namespace Jason
 
             //Golden Ring Drop
             int goldenRingDropChance;
-            if (player.item != "Golden Ring")
+            if (player.Item != "Golden Ring")
             {
-                goldenRingDropChance = random.Next(0, 5); //1 in 5 drop chance
+                goldenRingDropChance = random.Next(0, 6); //1 in 6 drop chance
 
                 if (goldenRingDropChance == 0)
                 {
-                    player.item = "Golden Ring";
+                    player.Item = "Golden Ring";
                     player.goldMultiplier = 2;
                     Console.WriteLine($"You found a Golden Ring! Your gold multiplier is now {player.goldMultiplier}");
                 }
