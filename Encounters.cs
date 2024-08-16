@@ -93,7 +93,7 @@ namespace Jason
                 Console.WriteLine("");
                 bool validChoice = false;
 
-                while (!validChoice && player.stun == false) //While you make a valid choice and you aren't stunned, attack
+                while (!validChoice && player.Stun == false) //While you make a valid choice and you aren't stunned, attack
                 {
                     switch (attackChoice)
                     {
@@ -130,10 +130,10 @@ namespace Jason
                 }
 
                 //Player stun
-                if (player.stun == true) //If the player is stunned
+                if (player.Stun == true) //If the player is stunned
                 {
                     Console.WriteLine("You are stunned and can't attack!");
-                    player.stun = false;
+                    player.Stun = false;
                 }
 
                 
@@ -164,15 +164,15 @@ namespace Jason
                 Player.enemy.EnemyAttack(player, n, p, h);
 
                 //Player bleed
-                if (player.bleed == true && player.bleedTurn < 2 && player.Health > 0) //If you are bleeding and it's less than 2 turns
+                if (player.Bleed == true && player.bleedTurn < 2 && player.Health > 0) //If you are bleeding and it's less than 2 turns
                 {
                     player.TakeBleedDamage(5);
                     player.bleedTurn++;
                 }
 
-                else if (player.bleed == true && player.bleedTurn >= 2) //If you are bleeding and it has been 2 turns
+                else if (player.Bleed == true && player.bleedTurn >= 2) //If you are bleeding and it has been 2 turns
                 {
-                    player.bleed = false;
+                    player.Bleed = false;
                     player.bleedTurn = 0;
                     Console.WriteLine("You stopped bleeding.");
                 }
