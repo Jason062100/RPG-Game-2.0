@@ -23,12 +23,19 @@ DONE Add Item (Golden Ring) to shop
 DONE Make monsters different each time
 DONE make poison not able to inflict if you use shadows
 DONE make shadows last one more turn
+DONE Fix all variable and properties capitalization
+DONE Make level up do more (add more armor)
+DONE Make heal staff heal for random amount??
+DONE add upgrade shop
 
 --TO-DO--
-Fix all variable and properties capitalization
-Make level up do more (add more armor)
 Make level up cost more exp each time you level, make monsters drop more xp per level
-Make heal staff heal for random amount??
+Change shop inputs to be (1) and (2) instead of Y and N
+
+Add New Attacks
+-warrior: shield bash (block some damage and do some back)
+-mage: summon elemental spirit to fight with you? , life drain?
+-rogue: ambush (if successful, allows you to hit twice in a row. If not, allows the enemy to.)
 
 
 scale game
