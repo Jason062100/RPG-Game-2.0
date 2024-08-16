@@ -7,19 +7,32 @@ using System.Threading.Tasks;
 
 namespace Jason
 {
-
-    //Player stats
     public class Player
     {
+        public Player(int initialHealth, int initialLevel, int initialExperience, int initialMaxHealth, int initialDamage)
+        {
+            Health = initialHealth;
+            Level = initialLevel;
+            Experience = initialExperience;
+            MaxHealth = initialMaxHealth;
+            Damage = initialDamage;
+
+            Bleed = false;
+            bleedTurn = 0;
+            Stun = false;
+            Invis = false;
+            increasedDamage = false;
+        }
+
+        //Player stats
         public int Health { get; private set; }
         public int Level { get; private set; }
         public int Experience { get; set; }
         public int MaxHealth { get; private set; }
-
-        //Player stats
+        public string Class { get; set; }
         public string Weapon { get; set; }
-        public string item { get; set; }
-        public double damage { get; set; }
+        public string Item { get; set; }
+        public double Damage { get; set; }
         public int potions = 3;
         public int potionStrength = 11;
         public int gold = 0;
@@ -27,50 +40,37 @@ namespace Jason
         public int xp = 0;
 
         //Armor
+        public int armor = 0;
+        public int minArmor = 0;
         public int warriorArmor = 10;
         public int mageArmor = 5;
         public int rogueArmor = 5;
 
-        //Properties for status effects
-        public bool bleed { get; set; }
+        //Properties/Variables for status effects
+        public bool Bleed { get; set; }
         public int bleedTurn = 0;
-        public bool stun { get; set; }
+        public bool Stun { get; set; }
         public bool Invis { get; set; }
         public int shadowsTurn = 0;
         public bool ShadowStep { get; set; }
+        public bool Shielded { get; set; }
 
-        public bool increaseDamage { get; set; }
-
+        public bool increasedDamage;
 
         static Random random = new Random();
         public static Enemies enemy = new Enemies();
-
-        public Player(int initialHealth, int initialLevel, int initialExperience, int initialMaxHealth, int initialDamage)
-        {
-            Health = initialHealth;
-            Level = initialLevel;
-            Experience = initialExperience;
-            MaxHealth = initialMaxHealth;
-            damage = initialDamage;
-
-            bleed = false;
-            bleedTurn = 0;
-            stun = false;
-            Invis = false;
-            increaseDamage = false;
-        }
 
 
         //Method to inflict bleed
         public void InflictBleed()
         {
-            bleed = true;
+            Bleed = true;
             Console.WriteLine("The enemy has inflicted bleed on you!");
         }
         //Method to inflict stun
         public void InflictStun()
         {
-            stun = true;
+            Stun = true;
             Console.WriteLine("The enemy has inflicted stun on you!");
         }
         //Method to inflict invis
@@ -79,16 +79,15 @@ namespace Jason
             Invis = true;
         }
 
-
         public void InflictStatus()
         {
-            if (bleed == false && Invis == false) //If the player isn't bleeding already and the player isn't invis
+            if (Bleed == false && Invis == false) //If the player isn't bleeding already and the player isn't invis
             {
                 int playerBleedChance = random.Next(0, 10); //1 in 8 change to bleed
                 if (playerBleedChance == 0) InflictBleed();
             }
 
-            if (stun == false && Invis == false) //If the player isn't stunned already and the player isn't invis
+            if (Stun == false && Invis == false) //If the player isn't stunned already and the player isn't invis
             {
                 int playerStunChance = random.Next(0, 10); //1 in 8 chance to be stunned
                 if (playerStunChance == 0) InflictStun();
@@ -99,55 +98,19 @@ namespace Jason
         {
             if (incDmg == false) //If you don't have a damage buff already, increase damage
             {
-                damage *= 1.25;
+                Damage *= 1.25;
                 Console.WriteLine("Your Flame Axe created a fiery aura around you that increased your attack.");
-                Console.WriteLine($"Your damage has been increased by 25%. Damage: {damage}");
-                increaseDamage = true;
+                Console.WriteLine($"Your damage has been increased by 25%. Damage: {Damage}");
+                increasedDamage = true;
             }
             else if (incDmg == true) //If you do have damage buff already, return damage back to normal
             {
-                damage /= 1.25;
+                Damage /= 1.25;
                 Console.WriteLine("Your fiery aura wore off. Your damage returned to normal.");
-                increaseDamage = false;
+                increasedDamage = false;
             }
         }
 
-
-        //Property to manage Class
-        public string Class { get; set; }
-        //Method to choose class
-        public void ChooseClass(string value)
-        {
-            Class = value;
-        }
-
-        //Level Up
-        public void LevelUp()
-        {
-            Level++;
-            Experience -= 20;
-            Console.WriteLine($"Congratulations! You leveled up to level {Level}! Player EXP: {Experience}");
-            Console.Write($"Your max health has been increased from {MaxHealth} to");
-            MaxHealth += 10;
-            Console.WriteLine($" {MaxHealth}!");
-            //heal a little?
-        }
-
-        public void BeatDungeon()
-        {
-            Health = MaxHealth;
-            bleed = false;
-            bleedTurn = 0;
-            stun = false;
-            Invis = false;
-
-            Console.WriteLine("You make a campfire in a small clearing that looks safe. After cooking and eating, you fall asleep under the stars.");
-            Console.WriteLine("You healed back to max health.");
-            Console.WriteLine("Press any key to continue.");
-            Console.ReadKey();
-        }
-
-        //Take Damage
         public void TakeDamage(int damage)
         {
             Health -= damage;
@@ -162,13 +125,61 @@ namespace Jason
             Console.WriteLine($"You bleed and lose 5 health. Player health: {Health}");
         }
 
-
         public void Heal(int heal)
         {
             Health += heal;
+            Console.WriteLine($"Your health is now: {Health}");
         }
 
+        public void ChooseClass(string value)
+        {
+            Class = value;
 
+            switch (Class)
+            {
+                case "Warrior":
+                    armor = warriorArmor;
+                    minArmor = 5;
+                    break;
+
+                case "Mage":
+                    armor = mageArmor;
+                    break;
+
+                case "Rogue":
+                    armor = rogueArmor;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        public void LevelUp()
+        {
+            Level++;
+            Experience -= 20;
+            Console.WriteLine($"Congratulations! You leveled up to level {Level}! Player EXP: {Experience}");
+            Console.Write($"Your max health has been increased from {MaxHealth} to");
+            MaxHealth += 10;
+            Console.WriteLine($" {MaxHealth}!");
+
+            armor += 5;
+        }
+
+        public void BeatDungeon()
+        {
+            Health = MaxHealth;
+            Bleed = false;
+            bleedTurn = 0;
+            Stun = false;
+            Invis = false;
+
+            Console.WriteLine("You make a campfire in a small clearing that looks safe. After cooking and eating, you fall asleep under the stars.");
+            Console.WriteLine("You healed back to max health.");
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
+        }
 
 
         //Warrior
@@ -179,6 +190,7 @@ namespace Jason
         {
             WarriorAttacks.Add("Stab");
             WarriorAttacks.Add("Overhead Swing");
+            WarriorAttacks.Add("Shield Bash");
             return WarriorAttacks;
         }
 
@@ -188,14 +200,15 @@ namespace Jason
         {
             WarriorAttackDetails.Add("Stab does 5-15 damage. Has a 1 in 5 chance of inflicting bleed and lasts for 2 turns.");
             WarriorAttackDetails.Add("Overhead Swing does 0-30 damage. Has a 1 in 5 chance of inflicting stun.");
+            WarriorAttackDetails.Add("Shield Bash blocks some of the incoming damage and does some damage back.");
             return WarriorAttackDetails;
         }
 
         //Warrior Stab
         public int Stab(int h, string n)
         {
-            int minAttack = (int)Math.Floor(damage - 9);
-            int maxAttack = (int)Math.Floor(damage);
+            int minAttack = (int)Math.Floor(Damage - 9);
+            int maxAttack = (int)Math.Floor(Damage);
 
             int attack = random.Next(minAttack, maxAttack); //5-15 dmg
             h -= attack;
@@ -217,7 +230,7 @@ namespace Jason
         //Warrior Overhead Swing
         public int OverheadSwing(int h, string n)
         {
-            int maxAttack = (int)Math.Floor(damage + 11);
+            int maxAttack = (int)Math.Floor(Damage + 11);
 
             int attack = random.Next(0, maxAttack); //0-30 dmg
             h -= attack;
@@ -233,6 +246,13 @@ namespace Jason
                 Console.WriteLine("You inflicted stun on the enemy.");
             }
 
+            return h;
+        }
+
+        public int ShieldBash(int h, string n)
+        {
+            
+            
             return h;
         }
 
@@ -255,7 +275,7 @@ namespace Jason
         public List<string> MageAttackDetailsList()
         {
             MageAttackDetails.Add("Fireball does 15-30 damage. Has a 1 in 3 chance of missing. 20-30 damage.");
-            MageAttackDetails.Add("Magic Missle does 1-4 damage per hit. Can hit 2-8 times. 4-36 damage.");
+            MageAttackDetails.Add("Magic Missle does 1-4 damage per hit. Can hit 3-8 times. 6-36 damage.");
             return MageAttackDetails;
         }
 
@@ -263,22 +283,24 @@ namespace Jason
         //Fireball
         public int Fireball(int h, string n)
         {
-            int minAttack = (int)Math.Floor(damage);
-            int maxAttack = (int)Math.Floor(damage + 11);
+            int minAttack = (int)Math.Floor(Damage);
+            int maxAttack = (int)Math.Floor(Damage + 11);
 
             int attack = random.Next(minAttack, maxAttack); //20-30 dmg
 
-            int missChance = random.Next(0, 3); //1/3 chance of missing
+            int missChance = random.Next(0, 3); //1 in 3 chance of missing
             if (missChance == 0)
             {
                 attack = 0;
                 Console.WriteLine("Your attack missed!");
             }
+            else
+            {
+                h -= attack;
+                if (h < 0) h = 0;
 
-            h -= attack;
-            if (h < 0) h = 0;
-
-            Console.WriteLine($"You used Fireball on the {n} for {attack} damage. Enemy health: {h}");
+                Console.WriteLine($"You used Fireball on the {n} for {attack} damage. Enemy health: {h}");
+            }
 
             return h;
         }
@@ -286,12 +308,12 @@ namespace Jason
         //Magic Missile
         public int MagicMissle(int h, string n)
         {
-            int minAttack = (int)Math.Floor(damage - 18);
-            int maxAttack = (int)Math.Floor(damage - 16);
+            int minAttack = (int)Math.Floor(Damage - 18);
+            int maxAttack = (int)Math.Floor(Damage - 16);
 
             int attack = random.Next(minAttack, maxAttack); //2-4 dmg per hit
-            int hits = random.Next(2, 9); //Can hit 2-8 times
-            attack *= hits; //4-36 damage
+            int hits = random.Next(3, 9); //Can hit 3-8 times
+            attack *= hits; //6-36 damage
 
             h -= attack;
             if (h < 0) h = 0;
@@ -338,8 +360,8 @@ namespace Jason
             switch (Invis)
             {
                 case true: //If invis
-                    minAttack = (int)Math.Floor(damage - 9);
-                    maxAttack = (int)Math.Floor(damage + 1);
+                    minAttack = (int)Math.Floor(Damage - 9);
+                    maxAttack = (int)Math.Floor(Damage + 1);
 
                     attack = random.Next(minAttack, maxAttack); //10-20 damage (with crit: 20-30)
                     h -= attack;
@@ -369,8 +391,8 @@ namespace Jason
                     break;
 
                 case false: //If not invis
-                    minAttack = (int)Math.Floor(damage - 15);
-                    maxAttack = (int)Math.Floor(damage - 4);
+                    minAttack = (int)Math.Floor(Damage - 15);
+                    maxAttack = (int)Math.Floor(Damage - 4);
 
                     attack = random.Next(minAttack, maxAttack); //5-15 damage (with crit: 15-25 damage)
                     h -= attack;
@@ -398,8 +420,8 @@ namespace Jason
         //Backstab
         public int Backstab(int h, string n)
         {
-            int minAttack = (int)Math.Floor(damage - 9);
-            int maxAttack = (int)Math.Floor(damage + 1);
+            int minAttack = (int)Math.Floor(Damage - 9);
+            int maxAttack = (int)Math.Floor(Damage + 1);
 
             int attack = random.Next(minAttack, maxAttack); //10-20 damage
             h -= attack;
