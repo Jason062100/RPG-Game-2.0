@@ -130,9 +130,9 @@ namespace Jason
                                 break;
 
                             case "GOLDEN RING":
-                                if (player.item != "Golden Ring")
+                                if (player.Item != "Golden Ring")
                                 {
-                                    player.item = "Golden Ring";
+                                    player.Item = "Golden Ring";
                                     player.goldMultiplier = 2;
                                     player.gold -= value;
                                     Console.WriteLine($"You spent {value} gold to buy a Golden Ring. You now have {player.gold} gold.");
