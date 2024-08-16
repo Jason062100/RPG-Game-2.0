@@ -11,6 +11,7 @@ namespace Jason
     {
         public static Shop shop = new Shop();
         public static Random random = new Random();
+        public static Weapons weapons = new Weapons();
 
         public static string playAgain = "y";
 
@@ -30,6 +31,10 @@ namespace Jason
                 ExitDungeon(player);
 
                 DungeonTwo(player);
+
+                ExitDungeon(player);
+
+                weapons.UpgradeWeapon(player);
 
                 //Win
                 if (player.Health > 0) Console.WriteLine("You win. Congrats!");
@@ -163,6 +168,17 @@ namespace Jason
             }
 
             if (player.Health > 0) Encounters.Combat(player, "Dragon", 50, 80);
+            if (player.Health > 0)
+            {
+                Console.WriteLine("Press any key to continue.");
+                Console.ReadKey();
+                Console.Clear();
+                Console.WriteLine("You have slain the boss of this dungeon!");
+                Console.WriteLine("You carve off some pieces of the dragon's scales.");
+                Console.WriteLine("Press any key to continue.");
+                Console.ReadKey();
+                Console.Clear();
+            }
         }
 
 
