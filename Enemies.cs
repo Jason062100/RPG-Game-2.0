@@ -42,34 +42,16 @@ namespace Jason
             if (h > 0 && enemyStun == false && player.Invis == false && player.ShadowStep == false)
             {
                 int enemyAttack = random.Next(0, p + 1);
-                int armor;
+                int armor = random.Next(player.minArmor, player.armor + 1);
+                enemyAttack -= armor;
+                Console.WriteLine($"{armor} damage from the enemy is negated by your armor.");
 
-                //Checks class, uses armor for that class to negate damage
-                switch (player.Class)
-                {
-                    case "Warrior":
-                        armor = random.Next(5, player.warriorArmor + 1); //5-10
-                        enemyAttack -= armor;
-                        Console.WriteLine($"{armor} damage from the enemy is negated by your armor.");
-                        break;
-
-                    case "Mage":
-                        armor = random.Next(0, player.mageArmor + 1); //0-5
-                        enemyAttack -= armor;
-                        Console.WriteLine($"{armor} damage from the enemy is negated by your armor.");
-                        break;
-
-                    case "Rogue":
-                        armor = random.Next(0, player.rogueArmor + 1); //0-5
-                        enemyAttack -= armor;
-                        Console.WriteLine($"{armor} damage from the enemy is negated by your armor.");
-                        break;
-                }
                 if (enemyAttack < 0) enemyAttack = 0;
                 player.TakeDamage(enemyAttack);
             }
 
-            if (h > 0 && enemyStun == false) //If the enemy is alive and isn't stunned, try to inflict status
+            //If the enemy is alive and isn't stunned, try to inflict status
+            if (h > 0 && enemyStun == false)
             {
                 player.InflictStatus();
             }
@@ -124,7 +106,7 @@ namespace Jason
                 player.Invis = false;
                 player.shadowsTurn = 0;
 
-                if (player.increaseDamage == true) player.IncreaseDamage(true);
+                if (player.increasedDamage == true) player.IncreaseDamage(true);
             }
         }
     }
